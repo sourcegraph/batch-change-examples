@@ -1,0 +1,9 @@
+{
+  "scopeQuery": "repo:github.com/sd9/codeintellify repohasfile:yarn.lock file:^package.json$ rxjs",
+  "steps": [
+    {
+      "type": "docker",
+      "image": "rxjs-upgrade"
+    }
+  ]
+}
