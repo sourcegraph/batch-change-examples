@@ -3,7 +3,7 @@
   "steps": [
     {
       "type": "docker",
-      "image": "rxjs-upgrade"
+      "image": "rxjs-upgrade:latest"
     }
   ]
 }
