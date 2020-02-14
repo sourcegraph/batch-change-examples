@@ -1,0 +1,9 @@
+{
+  "scopeQuery": "repo:github.com/sourcegraph/sourcegraph$ repohasfile:yarn.lock file:^package.json$ rxjs patterntype:regexp",
+  "steps": [
+    {
+      "type": "docker",
+      "image": "rxjs-upgrade:latest"
+    }
+  ]
+}

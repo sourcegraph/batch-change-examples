@@ -1,17 +1,19 @@
-search-scope-check:
+ACTION=action.json
+
+search-scope:
 	src actions scope-query -f action.json
 
 build:
-	docker image pull node:13-alpine
-	docker image build -t rxjs-upgrade:latest .
+	docker image pull node:13
+	docker image build -t sourcegraph/rxjs-upgrade:latest .
 
 exec:
-	src actions exec -timeout 15m -keep-logs -f action.json > diffs.json
+	src actions exec -timeout 15m -keep-logs -f $(ACTION) > diffs.json
 
 campaign-plan:
 	cat diffs.json | src campaign plan create-from-patches
 
-upgrade-rxjs-docker-command:
+rxjs-upgrade-docker-command:
 	git clone https://github.com/sourcegraph/codeintellify.git
 	cat rxjs-upgrade.sh | docker container run \
 		--name rxjs-upgrade \
