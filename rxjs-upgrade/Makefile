@@ -1,7 +1,7 @@
 ACTION=action.json
 
 search-scope:
-	src actions scope-query -f action.json
+	src actions scope-query -f $(ACTION)
 
 build:
 	docker image pull node:13

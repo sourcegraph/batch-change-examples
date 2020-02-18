@@ -1,0 +1,9 @@
+{
+  "scopeQuery": "repo:github.com/sd9 repohasfile:yarn.lock file:^package.json$ archived:no fork:no rxjs",
+  "steps": [
+    {
+      "type": "docker",
+      "image": "sourcegraph/rxjs-upgrade:latest"
+    }
+  ]
+}
