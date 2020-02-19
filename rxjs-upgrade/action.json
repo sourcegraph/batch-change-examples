@@ -1,5 +1,5 @@
 {
-  "scopeQuery": "repo:github.com/sourcegraph/(sourcegraph-basic-code-intel|sourcegraph|codeintellify)$ repohasfile:yarn.lock file:^package.json$ archived:no fork:no rxjs",
+  "scopeQuery": "repo:github.com/sourcegraph/(sourcegraph|codeintellify|sourcegraph-basic-code-intel)$ repohasfile:yarn.lock file:^package.json$ archived:no fork:no rxjs",
   "steps": [
     {
       "type": "docker",

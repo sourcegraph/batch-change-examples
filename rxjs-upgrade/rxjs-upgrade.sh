@@ -1,4 +1,8 @@
-#! /usr/bin/env sh
+#! /usr/bin/env bash
+
+# TODO: How to handle multiple packages with individual package.json files
+
+set -eo pipefail
 
 # Copy files to container only disk location for to avoid file sync thrashing
 cp -r /work /tmp/app

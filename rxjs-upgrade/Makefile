@@ -8,7 +8,7 @@ build:
 	docker image build -t sourcegraph/rxjs-upgrade:latest .
 
 exec:
-	src actions exec -timeout 15m -keep-logs -f $(ACTION) > diffs.json
+	src actions exec -timeout 45m -keep-logs -f $(ACTION) > diffs.json
 
 campaign-plan:
 	cat diffs.json | src campaign plan create-from-patches
