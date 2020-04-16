@@ -1,4 +1,4 @@
-# Refactoring Go code withComby
+# Refactoring Go code with Comby
 
 This action definition rewrites Go statements from
 

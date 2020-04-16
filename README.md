@@ -12,3 +12,4 @@ Please ensure you have installed the [Sourcegraph CLI](https://github.com/source
 
 - [Upgrade RxJS](rxjs-upgrade/README.md) (single repository for now).
 - [Rewrite Go import paths using Comby](comby-goimports/README.md)
+- [Refactor Go code with Comby](comby-go-refactor/README.md)
