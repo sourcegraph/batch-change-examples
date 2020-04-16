@@ -2,11 +2,11 @@
 
 Example action definitions to get you started with Sourcegraph Campaigns.
 
-## Set up
+## Getting started
 
-Please ensure you have installed the [Sourcegraph CLI](https://github.com/sourcegraph/src-cli) and `git`.
+Take a look at the [Sourcegraph documentation on Campaigns](https://docs.sourcegraph.com/user/campaigns) to learn what Campaigns are and how to run them.
 
-> NOTE: Campaigns are currently in private beta and being trialled by select customers. You can [request a Campaigns demo](https://about.sourcegraph.com/contact/request-automation-demo/) to see if Campaigns are a good fit for your organization at this time.
+> NOTE: Campaigns are currently in beta.
 
 ## Examples
 
