@@ -1,6 +1,6 @@
 # Upgrade RxJS using Sourcegraph Campaigns
 
-> NOTE: Sourcegraph Campaigns require the [Sourcegraph CLI](https://github.com/sourcegraph/src-cli) be [installed](https://github.com/sourcegraph/src-cli#installation) and [configured](https://github.com/sourcegraph/src-cli#setup) to point at your [Campaigns enabled](https://docs.sourcegraph.com/user/automation#configuration) Sourcegraph instance.
+> NOTE: Sourcegraph Campaigns require the [Sourcegraph CLI](https://github.com/sourcegraph/src-cli) be [installed](https://github.com/sourcegraph/src-cli#installation) and [configured](https://github.com/sourcegraph/src-cli#setup) to point at your [Campaigns enabled](https://docs.sourcegraph.com/user/campaigns) Sourcegraph instance.
 
 This examples upgrades RxJS in the [codeintellify](https://github.com/sourcegraph/codeintellify) repository to 6.5.4. While Campaigns are designed to run over hundreds of repositories, this example is limited to a single repository for speed, as the intention is to demo the workflow, not how it scales.
 
