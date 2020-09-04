@@ -1,35 +1,55 @@
 # Rewriting Go imports with Comby
 
-> NOTE: Sourcegraph Campaigns requires the [Sourcegraph CLI](https://github.com/sourcegraph/src-cli) be [installed](https://github.com/sourcegraph/src-cli#installation) and [configured](https://github.com/sourcegraph/src-cli#setup) to point at your [Campaigns enabled](https://docs.sourcegraph.com/user/campaigns) Sourcegraph instance.
+This campaign rewrites Go import paths for the `log15` package from `gopkg.in/inconshreveable/log15.v2` to `github.com/inconshreveable/log15` using [Comby](https://comby.dev/):
 
-This action definition rewrites Go import paths for the `log15` package from `gopkg.in/inconshreveable/log15.v2` to `github.com/inconshreveable/log15` using [Comby](https://comby.dev/):
+It can handle single-package import statements like these
 
-```json
-{
-  "scopeQuery": "lang:go gopkg.in\/inconshreveable\/log15.v2",
-  "steps": [
-    {
-      "type": "docker",
-      "image": "comby/comby",
-      "args": [
-        "-in-place",
-        "import (:[before]\"gopkg.in/inconshreveable/log15.v2\":[after])",
-        "import (:[before]\"github.com/inconshreveable/log15\":[after])",
-        ".go",
-        "-matcher",
-        ".go",
-        "-d",
-        "/work",
-        "-exclude-dir",
-        ".,vendor"
-      ]
-    }
-  ]
-}
+```go
+import "gopkg.in/inconshreveable/log15.v2"
 ```
 
-Save as `action.json` and execute:
+and multi-package import statements like these:
+
+```go
+import (
+	"io"
+
+	"github.com/pkg/errors"
+	"gopkg.in/inconshreveable/log15.v2"
+)
+```
+
+---
+
+```yaml
+name: rewrite-log15-import
+description: This campaign eewrites Go import paths for the `log15` package from `gopkg.in/inconshreveable/log15.v2` to `github.com/inconshreveable/log15` using [Comby](https://comby.dev/)
+
+# Find all repositories that contain the import we want to change.
+on:
+  - repositoriesMatchingQuery: lang:go gopkg.in/inconshreveable/log15.v2
+
+# In each repository
+steps:
+  # we first replace the import when it's part of a multi-package import statement
+  - run: comby -in-place 'import (:[before]"gopkg.in/inconshreveable/log15.v2":[after])' 'import (:[before]"github.com/inconshreveable/log15":[after])' .go -matcher .go -exclude-dir .,vendor
+    container: comby/comby
+  # ... and when it's a single import line.
+  - run: comby -in-place 'import "gopkg.in/inconshreveable/log15.v2"' 'import "github.com/inconshreveable/log15"' .go -matcher .go -exclude-dir .,vendor
+    container: comby/comby
+
+# Describe the changeset (e.g., GitHub pull request) you want for each repository.
+changesetTemplate:
+  title: Fix import path for log15 package
+  body: Rewrites Go import paths for the `log15` package from `gopkg.in/inconshreveable/log15.v2` to `github.com/inconshreveable/log15` using [Comby](https://comby.dev/)
+  branch: campaign-comby-go-fmt # Push the commit to this branch.
+  commit:
+    message: Fix import path for log15 package
+  published: false
+```
+
+Save as `campaign-spec.yaml` and execute
 
 ```
-src -v actions exec -f action.json -create-patchset
+src campaigns preview -f campaign-spec.yaml -namespace <your-user-or-org-name>
 ```
