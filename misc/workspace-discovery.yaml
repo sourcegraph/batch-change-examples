@@ -1,0 +1,39 @@
+name: workspace-discovery
+description: Automatic workspace discovery
+
+on:
+  - repositoriesMatchingQuery: repo:automation-testing$
+  - repository: github.com/sourcegraph/sourcegraph
+
+workspaces:
+  - rootAtLocationOf: go.mod
+    in: github.com/sourcegraph/sourcegraph*
+  - rootAtLocationOf: package.json
+    in: "github.com/sourcegraph/automation-testing"
+    onlyFetchWorkspace: true
+
+steps:
+  - run: "echo \"pwd: $(pwd)\nfiles in /work:\n$(find /work ! -path \"/work/.git/*\")\" >> message.txt"
+    container: alpine:3
+  - run:  if [[ -f "package.json" ]]; then cat package.json | jq -j .name; fi
+    container: jiapantw/jq-alpine:latest
+    outputs:
+      projectName:
+        value: ${{ step.stdout }}
+
+changesetTemplate:
+  title: Automatic workspace discovery
+  body:  Automatic workspace discovery
+
+  # If we have an `outputs.projectName` we use it, otherwise we append the path
+  # of the workspace. If the path is emtpy (as is the case in the root folder),
+  # we ignore it.
+  branch: |
+    ${{ if eq outputs.projectName "" }}
+    ${{ join_if "-" "thorsten/workspace-discovery" (replace steps.path "/" "-") }}
+    ${{ else }}
+    thorsten/workspace-discovery-${{ outputs.projectName }}
+    ${{ end }}
+  published: false
+  commit:
+    message: Automatic workspace discovery

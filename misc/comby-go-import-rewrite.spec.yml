@@ -1,0 +1,28 @@
+name: rewrite-log15-import
+description: "This campaign rewrites Go import paths for the `log15` package from
+
+`gopkg.in/inconshreveable/log15.v2`
+
+to
+
+`github.com/inconshreveable/log15`
+
+using [Comby](https://comby.dev/)"
+
+on:
+  - repositoriesMatchingQuery: lang:go gopkg.in/inconshreveable/log15.v2 -repo:sourcegraph/sourcegraph$
+
+steps:
+  - run: comby -in-place 'import (:[before]"gopkg.in/inconshreveable/log15.v2":[after])' 'import (:[before]"github.com/inconshreveable/log15":[after])' .go -matcher .go -exclude-dir .,vendor
+    container: comby/comby
+  - run: comby -in-place 'import "gopkg.in/inconshreveable/log15.v2"' 'import "github.com/inconshreveable/log15"' .go -matcher .go -exclude-dir .,vendor
+    container: comby/comby
+
+# Describe the changeset (e.g., GitHub pull request) you want for each repository.
+changesetTemplate:
+  title: Fix import path for log15 package
+  body: Rewrites Go import paths for the `log15` package from `gopkg.in/inconshreveable/log15.v2` to `github.com/inconshreveable/log15` using [Comby](https://comby.dev/)
+  branch: campaign/rewrite-log15-import
+  commit:
+    message: Fix import path for log15 package
+  published: true

@@ -1,0 +1,48 @@
+name: dynamic-changeset-template
+description: Hello Outputs
+
+on:
+  - repository: github.com/sourcegraph/src-cli
+
+steps:
+  - run: echo "Hello there!" >> message.txt && cat message.txt
+    container: alpine:3
+    # NEW:
+    outputs:
+      friendlyMessage:
+        value: "${{ step.stdout }}"
+        # format: text is implicit
+  - run: cat .goreleaser.yml >&2
+    container: alpine:3
+    # NEW:
+    outputs:
+      goreleaserConfig:
+        value: "${{ step.stderr }}"
+        # we will parse the value here as YAML, meaning that we can access it as an object
+        format: yaml
+      goreleaserConfigExists:
+        # we can use the power of Go's text/template engine to dynamically produce complex values
+        value: "exists: ${{ gt (len step.stderr) 0 }}"
+        format: yaml
+
+changesetTemplate:
+  # title allows templating
+  title: "The friendly message is: `${{ outputs.friendlyMessage }}`"
+  # body allows templating
+  body: |
+    This repository has a `gorelaserConfig`: ${{ outputs.goreleaserConfigExists.exists }}.
+
+    (Since these are just Go `text/templates` and `goreleaserConfig` was parsed as YAML we can access every field)
+
+    The `goreleaser.yml` defines the following `before.hooks`:
+
+    ${{ range $index, $hook := outputs.goreleaserConfig.before.hooks }}
+    - `${{ $hook }}`
+    ${{ end }}
+
+  # branch allows templating
+  branch: thorsten/variables-${{ outputs.goreleaserConfig.dist }}
+  published: draft
+  commit:
+    # commit message allows templating
+    message: "The friendly message is: `${{ outputs.friendlyMessage }}`"

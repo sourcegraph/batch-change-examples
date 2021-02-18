@@ -1,0 +1,27 @@
+name: branch-addressing
+description: Addressing a single changeset by branch name
+
+on:
+  - repository: github.com/sourcegraph/automation-testing
+
+workspaces:
+  - rootAtLocationOf: package.json
+    in: github.com/sourcegraph/automation-testing
+
+steps:
+  - run: |
+      echo "We are in $(basename $(pwd))" >> message.txt &&
+      basename $(pwd)
+    container: alpine:3
+    outputs:
+      directoryName:
+        value: ${{ step.stdout }}
+
+changesetTemplate:
+  title: Branch addressing
+  body: Addressing a single changeset by branch name
+  commit:
+    message: Branch addressing
+  branch: thorsten/branch-addressing-${{ outputs.directoryName }}
+  published:
+    - github.com/sourcegraph/automation-*@thorsten/branch-addressing-project1: draft

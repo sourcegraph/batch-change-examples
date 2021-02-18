@@ -1,0 +1,24 @@
+name: use-allowlist-denylist-wording
+description: This campaign updates our Markdown docs to use the terms "allowlist" and "denylist" instead of "whitelist" and "blacklist".
+
+# Search for repositories in which the term "whitelist" or "blacklist" appears
+# in Markdown files.
+on:
+  - repositoriesMatchingQuery: whitelist OR blacklist lang:markdown -file:vendor repo:sourcegraph
+
+# In each repository
+steps:
+  # find all *.md or *.markdown files, that are not in a vendor or node_modules folder, and replace the terms in them
+  - run: |
+      find . -type f \( -name '*.md' -or -name '*.markdown' \) -not -path "*/vendor/*" -not -path "*/node_modules/*" |\
+      xargs sed -i 's/whitelist/allowlist/g; s/blacklist/denylist/g'
+    container: alpine:3
+
+# Describe the changeset (e.g., GitHub pull request) you want for each repository.
+changesetTemplate:
+  title: Replace whitelist/blacklist with allowlist/denylist
+  body: This replaces the terms whitelist/blacklist in Markdown files with allowlist/denylist
+  branch: campaigns/allowlist-denylist # Push the commit to this branch.
+  commit:
+    message: Replace whitelist/blacklist with allowlist/denylist
+  published: false

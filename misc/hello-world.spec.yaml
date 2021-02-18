@@ -1,0 +1,20 @@
+name: thorstens-hello-world-campaign
+description: Updated description Hello World to READMEs
+
+# Find all repositories that contain a README.md file.
+on:
+  - repositoriesMatchingQuery: file:README.md count:1
+
+# In each repository, run this command. Each repository's resulting diff is captured.
+steps:
+  - run: cat horse.txt
+    container: alpine:3
+
+# Describe the changeset (e.g., GitHub pull request) you want for each repository.
+changesetTemplate:
+  title: Hello World
+  body: My first campaign!
+  branch: thorsten/hello-world # Push the commit to this branch.
+  commit:
+    message: Append Hello World to all README.md files
+  published: false

@@ -1,0 +1,17 @@
+name: 267-in-2
+description: This campaign creates 267 pull/merge requests in 2 minutes. Boom.
+
+on:
+  - repositoriesMatchingQuery: '^#\s file:^README.md lang:markdown patterntype:regexp'
+
+steps:
+  - run: comby -in-place '# :[header]' '# WELCOME TO THE README OF :[header]' .md
+    container: comby/comby
+
+changesetTemplate:
+  title: Hello Viewers!
+  body: This is just one of _many_ pull requests. Is it useless? Yes. But is it cool? Yes.
+  branch: demo/267-in-2
+  commit:
+    message: Append Hello World to all README.md files
+  published: false

@@ -1,0 +1,36 @@
+name: update-dart-base-images-2-10
+description: This campaign updates `google/dart:2.*` base images in Dockerfiles to `google/dart:2.10.2`.
+
+on:
+  # Find all repositories that contain Dockerfiles with `FROM google/dart:2.*` as base images.
+  # The regexp used here matches images
+  #
+  #   google/dart:2.MINOR.PATCH
+  #   google/dart:2.MINOR.PATCH-dev.DEVMINOR.DEVPATCH
+  #
+  #   google/dart-runtime:2.MINOR.PATCH
+  #   google/dart-runtime:2.MINOR.PATCH-dev.DEVMINOR.DEVPATCH
+  #
+  # where the tag is < 2.10. Feel free to adjust it to your requirements.
+  - repositoriesMatchingQuery: ^FROM google\/dart(-runtime)?:2\.[0-9]\.?\d?(-dev\.\d\.\d)? file:Dockerfile  patternType:regexp
+
+# In each repository
+steps:
+  # we use comby to update the base images with the sha256 suffix
+  - run: |
+      find . -name Dockerfile -type f |\
+      xargs sed\
+        -i\
+        --regexp-extended\
+        's/FROM google\/dart(-runtime)?:2\.[[:digit:]]\.?[[:digit:]]?(-dev\.?[[:digit:]]?\.?[[:digit:]]?)?/FROM google\/dart:2\.10/g'
+    container: alpine:3
+
+# Describe the changeset (e.g., GitHub pull request) you want for each repository.
+changesetTemplate:
+  title: Update google/dart base images in Dockerfiles to 2.10.2
+  body: This updates google/dart base images used in Dockerfiles to version 2.10.2
+  branch: campaigns/google-dart-2-10-2-base-images # Push the commit to this branch.
+  commit:
+    message: Update google/dart base images in Dockerfiles to 2.10.2
+  published:
+    - github.com/sourcegraph/lsif-dart-action: true

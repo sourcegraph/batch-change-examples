@@ -1,0 +1,14 @@
+name: tracking-sourcegraph-prs
+description: "This tracks the progress of multiple changesets in Sourcegraph repositories."
+
+importChangesets:
+  - repository: github.com/sourcegraph/sourcegraph
+    externalIDs: [14512, 99999]
+  # - repository: github.com/sourcegraph/src-cli
+  #   externalIDs: [318, 812341]
+  # - repository: github.com/sourcegraph/automation-testing
+  #   externalIDs: [357]
+  # - repository: bitbucket.sgdev.org/SOUR/automation-testing
+  #   externalIDs: [100, 101]
+  # - repository: gitlab.sgdev.org/sourcegraph/automation-testing
+  #   externalIDs: [184]

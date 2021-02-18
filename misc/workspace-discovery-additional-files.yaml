@@ -1,0 +1,21 @@
+name: workspace-discovery
+description: Automatic workspace discovery
+
+on:
+  - repositoriesMatchingQuery: repo:automation-testing$
+
+workspaces:
+  - rootAtLocationOf: package.json
+    in: "github.com/sourcegraph/automation-testing"
+
+steps:
+  - run: "echo \"pwd: $(pwd)\nfiles in /work:\n$(find /work ! -path \"/work/.git/*\")\" >> message.txt"
+    container: alpine:3
+
+changesetTemplate:
+  title: Only download workspace discovery
+  body:  Only download workspace discovery
+  branch: ${{ join_if "-" "thorsten/workspace-discovery" (replace steps.path "/" "-") }}
+  published: false
+  commit:
+    message: Only download workspace discovery

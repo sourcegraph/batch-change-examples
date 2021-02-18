@@ -1,0 +1,34 @@
+name: gitignore-editor-files
+description: Append rules to `.gitignore` files to ignore Vim, Emacs and IntelliJ temp files.
+
+# Find all repositories that contain a .gitignore file.
+on:
+  - repositoriesMatchingQuery: repo:automation-testing$
+
+steps:
+  - run: cat /tmp/global-gitignore >> .gitignore
+    container: alpine:3
+    files:
+      /tmp/global-gitignore: |
+        # Vim
+        *.swp
+        # JetBrains/IntelliJ
+        .idea
+        # Emacs
+        *~
+        \#*\#
+        /.emacs.desktop
+        /.emacs.desktop.lock
+        .\#*
+        .dir-locals.el
+
+# Describe the changeset (e.g., GitHub pull request) you want for each repository.
+changesetTemplate:
+  title: Ignore editor temp files in .gitignore
+  body: This extends the .gitignore file to ignore temp files created by Vim/Emacs/IntelliJ
+  branch: campaigns/ignore-editor-files-no-admin # Push the commit to this branch.
+  commit:
+    message: Ignore editor temp files in .gitignore
+  published:
+    - gitlab.sgdev.org/sourcegraph/react-loading-spinner: true
+    - github.com/sd9/react-quill: false

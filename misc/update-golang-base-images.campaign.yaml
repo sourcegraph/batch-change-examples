@@ -1,0 +1,37 @@
+name: update-golang-base-images
+description: This campaign updates the golang builder images in Dockerfiles to Go 1.15.
+
+on:
+  # Find all repositories that contain Dockerfiles with `FROM golang:1.MINOR-alpine [...]` in it,
+  # where the MINOR version can be 10 to 14.
+  - repositoriesMatchingQuery: FROM golang:1.1:[minor~[0-4]]-alpine file:Dockerfile patternType:structural 
+  # and optionally specify a sha256 hash 
+  - repositoriesMatchingQuery: FROM golang:1.1:[minor~[0-4]]-alpine@sha256::[hash~[a-f0-9]+] file:Dockerfile patternType:structural 
+
+# In each repository
+steps:
+  # we use comby to update the base images with the sha256 suffix
+  - run: |
+      comby \
+        -in-place \
+        'FROM golang::[version]-alpine@sha256::[hash~[a-f0-9]+]' \
+        'FROM golang:1.15-alpine@sha256:df0119b970c8e5e9f0f5c40f6b55edddf616bab2b911927ebc3b361c469ea29c' \
+        Dockerfile
+    container: comby/comby
+  # and use comby to replace the ones without it:
+  - run: |
+      comby \
+        -in-place \
+        'FROM golang::[version]-alpine' \
+        'FROM golang:1.15-alpine' \
+        Dockerfile
+    container: comby/comby
+
+# Describe the changeset (e.g., GitHub pull request) you want for each repository.
+changesetTemplate:
+  title: Update golang base images in Dockerfiles to 1.15
+  body: This updates golang base images used in Dockerfiles from golang:1.10 to 1.14 to use golang:1.15.
+  branch: campaigns/golang-15-base-images # Push the commit to this branch.
+  commit:
+    message: Update golang base images in Dockerfiles to 1.15
+  published: false
