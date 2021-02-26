@@ -1,0 +1,33 @@
+name: refactor-go-jira
+description: |
+  This campaign creates Jira tickets for each repository where fmt.Sprintf is replaced by strconv.Itoa.
+on:
+  - repository: github.com/sourcegraph-testing/tiny-go-test-repository
+
+steps:
+  - run: comby -in-place 'fmt.Sprintf("%d", :[v])' 'strconv.Itoa(:[v])' .go -matcher .go -exclude-dir .,vendor; echo "issue"
+    container: comby/comby
+  - run: >
+      python ../create-jira.py
+      --summary 'Update ${{repository.name}}'
+      --description 'Modify ${{ previous_step.modified_files }}'
+      --campaign_name "reactor-go-jira"
+      --jira_sitename mmgcn
+      --jira_username mm@getcloudnative.fr
+      --jira_token $JIRA_TOKEN
+      --jira_project MP
+    container: malomarrec/src-py-jira:latest
+    env:
+      - JIRA_TOKEN
+    outputs:
+      issueLink:
+        value: ${{step.stdout}}
+
+changesetTemplate:
+  title: Replace fmt.Sprintf with equivalent strconv.Itoa
+  body: |
+    Linked issue: ${{outputs.issueLink}}
+  branch: campaigns/sprintf-to-itoa
+  commit:
+    message: Replacing fmt.Sprintf with strconv.Iota
+  published: false
