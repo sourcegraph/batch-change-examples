@@ -13,7 +13,8 @@ It demonstrates how to use [steps.outputs](https://docs.sourcegraph.com/campaign
 - Create a [JIRA API token](https://developer.atlassian.com/cloud/jira/platform/basic-auth-for-rest-apis/) and set it as the `JIRA_TOKEN` environment variable.
 
 ```bash
-JIRA_TOKEN=mysecrettoken src campaign apply -f jira.campaign.yaml
+JIRA_TOKEN=mysecrettoken
+src campaign apply -f jira.campaign.yaml
 ```
 
 ## Limitations
