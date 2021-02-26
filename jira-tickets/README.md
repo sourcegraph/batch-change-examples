@@ -14,6 +14,7 @@ It demonstrates how to use [steps.outputs](https://docs.sourcegraph.com/campaign
 
 ```bash
 JIRA_TOKEN=mysecrettoken src campaign apply -f jira.campaign.yaml
+```
 
 ## Limitations
 * Campaigns has a declarative syntax for code changes: if the state of the codebase has not changed between two runs, there will be no additional changesets created.
