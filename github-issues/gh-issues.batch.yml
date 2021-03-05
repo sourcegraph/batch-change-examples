@@ -1,0 +1,32 @@
+name: refactor-go-gh-issue
+description: |
+  This campaign creates Jira tickets for each repository where fmt.Sprintf is replaced by strconv.Itoa.
+  It also keeps the tickets updated when the campaigns is re-applied.
+on:
+  - repository: github.com/sourcegraph-testing/tiny-go-test-repository
+
+steps:
+  - run: comby -in-place 'fmt.Sprintf("%d", :[v])' 'strconv.Itoa(:[v])' ${{ join repository.search_result_paths " " }}
+    container: comby/comby
+  - run: >
+      python ../sync-issue.py
+      --repository ${{repository.name}}
+      --batch_change_name refactor-go-gh-issue
+      --description 'Modify ${{ previous_step.modified_files }}'
+      --gh_username malomarrec
+      --gh_token $GH_TOKEN
+    container: malomarrec/src-gh-issue:latest
+    env:
+      - GH_TOKEN
+    outputs:
+      issueLink:
+        value: ${{step.stdout}}
+
+changesetTemplate:
+  title: Replace fmt.Sprintf with equivalent strconv.Itoa
+  body: |
+    Linked issue: ${{outputs.issueLink}}
+  branch: batch-change/sprintf-to-itoa
+  commit:
+    message: Replacing fmt.Sprintf with strconv.Iota
+  published: false
