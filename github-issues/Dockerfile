@@ -7,4 +7,4 @@ RUN pip install requests
 COPY sync-issue.py /sync-issue.py
 
 # Code file to execute when the docker container starts up (`entrypoint.sh`)
-  ENTRYPOINT ["python","sync-issue.py"]
+ENTRYPOINT ["python","sync-issue.py"]
