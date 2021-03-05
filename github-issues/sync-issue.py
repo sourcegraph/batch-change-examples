@@ -39,6 +39,9 @@ def check_for_issue(repository, batch_change_name):
     res = session.get(repo_url)
     issues=res.json()
 
+    if res.status_code == 401 or res.status_code == 404:
+        raise Exception("Not authenticated. Did you set a GH_TOKEN environment variable with your PAT")
+
     while 'next' in res.links.keys():
         res=session.get(res.links['next']['url'])
         issues.extend(res.json())
