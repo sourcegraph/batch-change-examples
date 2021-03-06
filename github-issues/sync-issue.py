@@ -7,6 +7,7 @@ parser = argparse.ArgumentParser(description='Parse GH issue instructions')
 parser.add_argument("--repository", help="the GitHub repository where the issue will live", required=True)
 parser.add_argument("--batch_change_name", help="the name of the batch_change the issue is created from", required=True)
 parser.add_argument("--description", help="the issue description text", required=True)
+parser.add_argument("--reopen", dest='reopen', action='store_true', help="reopen closed issues matching the change.")
 parser.add_argument(
   "--labels",
   nargs="*",
@@ -14,18 +15,19 @@ parser.add_argument(
   default=[],
   help="(optional) a list of labels, space is the separator, eg. --labels label1 label2 label3"
 )
-
 parser.add_argument("--gh_username", help="GitHub username", required=True )
 parser.add_argument("--gh_token", help="GitHub PAT or machine access token, with push scope", required=True)
-
+parser.set_defaults(reopen=False)
 args = parser.parse_args()
 
 repository = args.repository
 batch_change_name = args.batch_change_name
 description = args.description
+reopen = args.reopen
 labels = args.labels
 GH_USERNAME = args.gh_username
 GH_TOKEN = args.gh_token
+
 URL = "https://api.github.com/repos/"
 
 # Cut prefix if exist
@@ -41,8 +43,11 @@ def check_for_issue(repository, batch_change_name):
 
     session = requests.Session()
     session.auth = (GH_USERNAME, GH_TOKEN)
+
     repo_url = URL +  repository + "/issues?per_page=100"
-    issue_id = 0
+    if reopen:
+        repo_url += "&state=all"
+
     res = session.get(repo_url)
     issues=res.json()
 
@@ -56,7 +61,7 @@ def check_for_issue(repository, batch_change_name):
     for issue in issues:
         if issue["title"] == "batch-change/"+batch_change_name:
             return issue["number"]
-    return issue_id
+    return 0
 
 def create_issue(repository, batch_change_name, description, labels):
     """Create an issue for the batch change.
@@ -118,7 +123,7 @@ def update_issue(repository, issue_id, description, label = []):
        headers=headers,
        auth=auth
     )
-    print(response.content)
+
     issue_number = json.loads(response.content.decode('utf-8'))["number"]
     print("https://github.com/"+repository+"/issues/"+str(issue_number))
 
