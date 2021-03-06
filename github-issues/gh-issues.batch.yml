@@ -15,6 +15,7 @@ steps:
       --description 'Modify ${{ previous_step.modified_files }}'
       --gh_username malomarrec
       --gh_token $GH_TOKEN
+      --labels batch-change campaign1
     container: malomarrec/src-gh-issue:latest
     env:
       - GH_TOKEN

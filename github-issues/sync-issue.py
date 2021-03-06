@@ -7,7 +7,14 @@ parser = argparse.ArgumentParser(description='Parse GH issue instructions')
 parser.add_argument("--repository", help="the GitHub repository where the issue will live", required=True)
 parser.add_argument("--batch_change_name", help="the name of the batch_change the issue is created from", required=True)
 parser.add_argument("--description", help="the issue description text", required=True)
-parser.add_argument("--labels", help="(optional) an array of issue labels", default=[])
+parser.add_argument(
+  "--labels",
+  nargs="*",
+  type=str,
+  default=[],
+  help="(optional) a list of labels, space is the separator, eg. --labels label1 label2 label3"
+)
+
 parser.add_argument("--gh_username", help="GitHub username", required=True )
 parser.add_argument("--gh_token", help="GitHub PAT or machine access token, with push scope", required=True)
 
@@ -66,8 +73,10 @@ def create_issue(repository, batch_change_name, description, labels):
     payload = {
         "title": "batch-change/" + batch_change_name,
         "body": description,
-        "labels": labels
         }
+
+    if len(labels) > 0:
+        payload["labels"] = labels
 
     payload = json.dumps(payload)
 
@@ -93,7 +102,8 @@ def update_issue(repository, issue_id, description, label = []):
     }
 
     payload = {
-        "body": description
+        "body": description,
+        "state": "open"
         }
 
     if len(labels) > 0:
@@ -108,6 +118,7 @@ def update_issue(repository, issue_id, description, label = []):
        headers=headers,
        auth=auth
     )
+    print(response.content)
     issue_number = json.loads(response.content.decode('utf-8'))["number"]
     print("https://github.com/"+repository+"/issues/"+str(issue_number))
 
