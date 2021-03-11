@@ -10,7 +10,7 @@ When reapplying the spec, it will
 - first check for existing issues matching the changes and update them if they exist
 - otherwise create new issues
 
-It demonstrates how to use [steps.outputs](https://docs.sourcegraph.com/batch_changes/references/batch_spec_yaml_reference#steps-outputs) and [campaigns spec templating](https://docs.sourcegraph.com/campaigns/references/campaign_spec_templating).
+It demonstrates how to use [steps.outputs](https://docs.sourcegraph.com/batch_changes/references/batch_spec_yaml_reference#steps-outputs) and [batch spec templating](https://docs.sourcegraph.com/batch_changes/references/batch_spec_templating).
 
 
 **Note**: by convention, all the issues tracked by this script must be named `batch-change/<batch-change-name>`. In this example `batch-change/refactor-go-gh-issue`
@@ -22,6 +22,25 @@ It demonstrates how to use [steps.outputs](https://docs.sourcegraph.com/batch_ch
 ```bash
 export GH_TOKEN=mysecrettoken
 src batch apply -f gh.issues.batch.yml
+```
+
+## Getting to know Batch Changes
+
+This spec uses batch spec templating to produce text values inserted in the spec at runtime. They are delimited by `${{` and `}}`.
+For example, one of the campaigns step passes the name of the batch change, to create a corresponding issue. Using the
+`${{batch_change.name}}` statement allows for it to be dynamically read from the spec name, instead of hard coded.
+
+```
+name: refactor-go-gh-issue
+
+steps:
+...
+- run: >
+      python ../sync-issue.py
+      ...
+      # no need to hardcode the campaign name twice!
+      --batch_change_name ${{batch_change.name}}
+      ...
 ```
 
 ## Limitations
