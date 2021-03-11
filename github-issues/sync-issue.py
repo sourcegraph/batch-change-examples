@@ -7,7 +7,7 @@ parser = argparse.ArgumentParser(description='Parse GH issue instructions')
 parser.add_argument("--repository", help="the GitHub repository where the issue will live", required=True)
 parser.add_argument("--batch_change_name", help="the name of the batch_change the issue is created from", required=True)
 parser.add_argument("--description", help="the issue description text", required=True)
-parser.add_argument("--reopen", dest='reopen', action='store_true', help="reopen closed issues matching the change.")
+parser.add_argument("--reopen", dest='reopen', action='store_true', help="reopen closed issues matching the change. Defaults to False.")
 parser.add_argument(
   "--labels",
   nargs="*",
