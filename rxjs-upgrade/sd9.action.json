@@ -1,9 +1,0 @@
-{
-  "scopeQuery": "repo:/sd9 repohasfile:yarn.lock -repo:sd9/(akita|recompose) file:^package.json$ archived:no fork:no rxjs",
-  "steps": [
-    {
-      "type": "docker",
-      "image": "sourcegraph/rxjs-upgrade:latest"
-    }
-  ]
-}

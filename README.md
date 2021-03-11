@@ -1,15 +1,15 @@
-# Campaign examples
+# Batch Changes examples
 
-Example action definitions to get you started with Sourcegraph Campaigns.
+Example batch specs to get you started with Batch Changes
 
 ## Getting started
 
-Take a look at the [Sourcegraph documentation on Campaigns](https://docs.sourcegraph.com/user/campaigns) to learn what Campaigns are and how to run them.
+Take a look at the [Sourcegraph documentation on Batch Changes](https://docs.sourcegraph.com/batch_changes) to learn what batch changes are and how to run them.
 
-> NOTE: Campaigns are currently in beta.
 
 ## Examples
 
-- [Upgrade RxJS](rxjs-upgrade/README.md) (single repository for now).
 - [Rewrite Go import paths using Comby](comby-goimports/README.md)
 - [Refactor Go code with Comby](comby-go-refactor/README.md)
+- [Open Jira tickets alongside changesets](jira-tickets/README.md)
+- [Open GitHub tickets alongside changesets (declarative)](github-issues/README.md)
