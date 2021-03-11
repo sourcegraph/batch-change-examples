@@ -16,6 +16,7 @@ steps:
       --gh_username malomarrec
       --gh_token $GH_TOKEN
       --labels batch-change campaign1
+      --reopen
     container: malomarrec/src-gh-issue:latest
     env:
       - GH_TOKEN
