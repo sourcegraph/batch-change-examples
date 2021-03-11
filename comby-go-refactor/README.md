@@ -1,6 +1,6 @@
 # Refactoring Go code with Comby
 
-This campaign rewrites Go statements from
+This batch change rewrites Go statements from
 
 ```go
 fmt.Sprintf("%d", number)
@@ -36,14 +36,14 @@ steps:
 changesetTemplate:
   title: Replacing fmt.Sprintf with strconv.Itoa
   body: This campiagn replaces `fmt.Sprintf` with `strconv.Itoa`
-  branch: campaign-comby-go-fmt # Push the commit to this branch.
+  branch: batch-changes/comby-go-fmt # Push the commit to this branch.
   commit:
     message: Replacing fmt.Sprintf with strconv.Iota
   published: true
 ```
 
-Save as `campaign-spec.yaml` and execute
+Save as `batch-spec.yaml` and execute
 
 ```
-src campaigns preview -f campaign-spec.yaml -namespace <your-user-or-org-name>
+src batch preview -f batch-spec.yaml -namespace <your-user-or-org-name>
 ```
