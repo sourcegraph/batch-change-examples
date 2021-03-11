@@ -1,5 +1,5 @@
 name: use-allowlist-denylist-wording
-description: This campaign updates our Markdown docs to use the terms "allowlist" and "denylist" instead of "whitelist" and "blacklist".
+description: This batch change updates our Markdown docs to use the terms "allowlist" and "denylist" instead of "whitelist" and "blacklist".
 
 # Search for repositories in which the term "whitelist" or "blacklist" appears
 # in Markdown files.
@@ -18,7 +18,7 @@ steps:
 changesetTemplate:
   title: Replace whitelist/blacklist with allowlist/denylist
   body: This replaces the terms whitelist/blacklist in Markdown files with allowlist/denylist
-  branch: campaigns/allowlist-denylist # Push the commit to this branch.
+  branch: batch-changes/allowlist-denylist # Push the commit to this branch.
   commit:
     message: Replace whitelist/blacklist with allowlist/denylist
   published: false
