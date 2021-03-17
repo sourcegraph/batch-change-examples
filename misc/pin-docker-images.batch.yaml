@@ -1,0 +1,35 @@
+name: pin-docker-base-images
+description: Pin Docker images using the `:latest` tag to a specific image digest.
+
+on:
+  # Find all repositories that contain Dockerfiles with a `:latest` tag in a base image.
+  - repositoriesMatchingQuery: ^FROM (\w+\/)?\w+:latest($|\s) file:Dockerfile patternType:regexp fork:yes
+
+# In each repository...
+steps:
+  # Use dockerlint to pin the images in the Dockerfiles we found:
+  - run: |
+      for file in "${{ join repository.search_result_paths " " }}";
+      do
+        dockerlint -w ${file}
+      done
+    container: sourcegraph/dockerlint-run:latest
+
+# Describe the changeset (e.g., GitHub pull request) you want for each repository.
+changesetTemplate:
+  title: Pin Docker `:latest` image tags to digest
+  body: |
+    The `:latest` tag changes, so future pulls of this image may retrieve a different image
+    with different (and possibly erroneous, unexpected, or dangerous) behavior.
+
+    Pin the image to an [image digest](https://docs.docker.com/engine/reference/commandline/pull/#pull-an-image-by-digest-immutable-identifier)
+    for deterministic behavior.
+
+    *See also: [Hadolint error DL3007](https://github.com/hadolint/hadolint/wiki/DL3007).*
+  branch: batch-changes/pin-docker-images
+  commit:
+    message: Pin Docker `:latest` image tags to digest
+  published:
+    - gitlab.sgdev.org/thorsten/*: true
+    - bitbucket.sgdev.org/SOUR/automation-testing: true
+    - github.com/sourcegraph-testing/etcd: true
