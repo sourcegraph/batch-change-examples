@@ -27,10 +27,10 @@ on:
   - repositoriesMatchingQuery: lang:go fmt.Sprintf("%d", :[v]) patterntype:structural
 
 steps:
-  - run: comby -in-place 'fmt.Sprintf("%d", :[v])' 'strconv.Itoa(:[v])' .go -matcher .go -exclude-dir .,vendor
+  - run: comby -in-place 'fmt.Sprintf("%d", :[v])' 'strconv.Itoa(:[v])' ${{ join repository.search_result_paths " " }}
     container: comby/comby
-  - run: gofmt -w ./
-    container: golang:1.15-alpine
+  - run: goimports -w ${{ join previous_step.modified_files " " }}
+    container: unibeautify/goimports
 
 # Describe the changeset (e.g., GitHub pull request) you want for each repository.
 changesetTemplate:
