@@ -13,3 +13,4 @@ Take a look at the [Sourcegraph documentation on Batch Changes](https://docs.sou
 - [Open Jira tickets alongside changesets](jira-tickets/README.md)
 - [Open GitHub tickets alongside changesets (declarative)](github-issues/README.md)
 - [Update the Docker Hub username in Circle CI configurations](update-circle-ci-config/update-circle-ci-config.batch.yaml)
+- [Update deprecated GraphQL API query](update-api-query/replace-viewer-configuration.yaml)
