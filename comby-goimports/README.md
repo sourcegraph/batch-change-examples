@@ -23,7 +23,7 @@ import (
 
 ```yaml
 name: rewrite-log15-import
-description: This campaign eewrites Go import paths for the `log15` package from `gopkg.in/inconshreveable/log15.v2` to `github.com/inconshreveable/log15` using [Comby](https://comby.dev/)
+description: This batch change rewrites Go import paths for the `log15` package from `gopkg.in/inconshreveable/log15.v2` to `github.com/inconshreveable/log15` using [Comby](https://comby.dev/)
 
 # Find all repositories that contain the import we want to change.
 on:
@@ -42,14 +42,14 @@ steps:
 changesetTemplate:
   title: Fix import path for log15 package
   body: Rewrites Go import paths for the `log15` package from `gopkg.in/inconshreveable/log15.v2` to `github.com/inconshreveable/log15` using [Comby](https://comby.dev/)
-  branch: campaign-comby-go-fmt # Push the commit to this branch.
+  branch: batch-changes/comby-go-fmt # Push the commit to this branch.
   commit:
     message: Fix import path for log15 package
   published: false
 ```
 
-Save as `campaign-spec.yaml` and execute
+Save as `batch-spec.yaml` and execute
 
 ```
-src campaigns preview -f campaign-spec.yaml -namespace <your-user-or-org-name>
+src batch preview -f batch-spec.yaml -namespace <your-user-or-org-name>
 ```

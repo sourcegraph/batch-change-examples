@@ -1,5 +1,5 @@
 name: update-typescript-monorepo
-description: This campaign updates the TypeScript dependency to the latest version
+description: This batch change updates the TypeScript dependency to the latest version
 
 on:
   - repository: github.com/sourcegraph/automation-testing
@@ -15,7 +15,7 @@ steps:
 changesetTemplate:
   title: Update TypeScript
   body: This updates TypeScript to the latest version
-  branch: campaigns/update-typescript-${{ replace steps.path "/" "-" }}
+  branch: batch-changes/update-typescript-${{ replace steps.path "/" "-" }}
   commit:
     message: Update TypeScript
   published: false

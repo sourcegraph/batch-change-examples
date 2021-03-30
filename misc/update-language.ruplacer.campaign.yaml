@@ -16,11 +16,11 @@
 #
 # Step 3: update the `repositoriesMatchingQuery` to include or exclude file types.
 #
-# Step 4: run this campaign
+# Step 4: run this batch change
 #
-#   $ src campaign preview -f update-language.campaign.yaml
+#   $ src batch preview -f update-language.batch.yaml
 name: update-language
-description: This campaign changes occurrences of whitelist & blacklist to allowlist & denylist.
+description: This batch change changes occurrences of whitelist & blacklist to allowlist & denylist.
 
 on:
   - repositoriesMatchingQuery: whitelist OR blacklist -file:scss$ -file:html$ repo:github.com/sourcegraph
@@ -40,7 +40,7 @@ steps:
 changesetTemplate:
   title: Replace usage of whitelist & blacklist with allowlist & denylist
   body: This replaces usages 
-  branch: campaigns/allowlist-denylist
+  branch: batch-changes/allowlist-denylist
   commit:
     message: Use allowlist/denylist in wording
   published: false

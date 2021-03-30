@@ -1,6 +1,6 @@
 name: refactor-go-jira
 description: |
-  This campaign creates Jira tickets for each repository where fmt.Sprintf is replaced by strconv.Itoa.
+  This batch change creates Jira tickets for each repository where fmt.Sprintf is replaced by strconv.Itoa.
 on:
   - repository: github.com/sourcegraph-testing/tiny-go-test-repository
 
@@ -27,7 +27,7 @@ changesetTemplate:
   title: Replace fmt.Sprintf with equivalent strconv.Itoa
   body: |
     Linked issue: ${{outputs.issueLink}}
-  branch: campaigns/sprintf-to-itoa
+  branch: batch-changes/sprintf-to-itoa
   commit:
     message: Replacing fmt.Sprintf with strconv.Iota
   published: false
