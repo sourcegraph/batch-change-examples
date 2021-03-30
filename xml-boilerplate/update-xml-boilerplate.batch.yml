@@ -1,0 +1,21 @@
+name: update-xml-boilerplate
+description: Update Namespace.target.package version to 2.0.0
+
+# Repositories containing this package
+on:
+  - repositoriesMatchingQuery: <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.5.0"
+
+# Any version (the :[] syntax) will be changed to 2.0.0. We could also match a specific version.
+steps:
+  # - run: comby -in-place '<PackageReference Include="Namespace.target.package" Version="1.0.0" />' '<PackageReference Include="Namespace.target.package" Version="1.1.0" />' ${{ join repository.search_result_paths " " }};
+    # container: comby/comby
+    - run: comby -in-place '<PackageReference Include="Microsoft.NET.Test.Sdk" Version=":[]" />' '<PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.0.0" />' ${{ join repository.search_result_paths " " }};
+      container: comby/comby
+# Describe the changeset
+changesetTemplate:
+  title: Update Namespace.target.package version to 2.0.0
+  body: This batch change updates Namespace.target.package version to 2.0.0
+  branch: batch-changes/update-package # Push the commit to this branch.
+  commit:
+    message: update-namespace-target-package
+  published: false
