@@ -1,5 +1,5 @@
 name: update-xml-boilerplate
-description: Update Namespace.target.package version to 2.0.0
+description: Update Microsoft.NET.Test.Sdk to 16.0.0
 
 # Repositories containing this package
 on:
@@ -13,8 +13,8 @@ steps:
       container: comby/comby
 # Describe the changeset
 changesetTemplate:
-  title: Update Namespace.target.package version to 2.0.0
-  body: This batch change updates Namespace.target.package version to 2.0.0
+  title: Update Microsoft.NET.Test.Sdk to 16.0.0
+  body: This batch change updates Microsoft.NET.Test.Sdk to 16.0.0
   branch: batch-changes/update-package # Push the commit to this branch.
   commit:
     message: update-namespace-target-package
