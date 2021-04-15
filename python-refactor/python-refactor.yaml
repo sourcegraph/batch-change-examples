@@ -11,7 +11,7 @@ steps:
   - run: |
       pip install 2to3 
       2to3 -w .
-    container: python:3.7.5-slim
+    container: python:3-slim
 
 # Describe the changeset (e.g., GitHub pull request) you want for each repository.
 changesetTemplate:
