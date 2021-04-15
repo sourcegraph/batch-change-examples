@@ -1,0 +1,23 @@
+name: python-refactor
+description: Python 2 to 3.
+
+# Python 2 to 3.
+
+on:
+  - repositoriesMatchingQuery: lang:python print ":[string]" -repo:python-language-server -repo:ctags fork:yes patternType:structural 
+
+# In each repository
+steps:
+  - run: |
+      pip install 2to3 
+      2to3 -w .
+    container: python:3-slim
+
+# Describe the changeset (e.g., GitHub pull request) you want for each repository.
+changesetTemplate:
+  title: Python conversion
+  body: Moving to Python 3
+  branch: campaigns/python-convert # Push the commit to this branch.
+  commit:
+    message: Moving Python 2 to Python 3.
+  published: false
