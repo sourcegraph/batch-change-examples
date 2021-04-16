@@ -1,0 +1,19 @@
+name: codeshift-demo
+description: Replace console.warn by console.log
+
+# Repositories containing this package
+on:
+  - repositoriesMatchingQuery: console.warn
+
+# Any version (the :[] syntax) will be changed to 2.0.0. We could also match a specific version.
+steps:
+    - run: npx jscodeshift -t /warn-to-log.ts . --extensions js,ts --parser=ts
+      container: malomarrec/codeshift
+
+changesetTemplate:
+  title: Replace console.warn by console.log in .js files
+  body: Because why not?
+  branch: batch-changes/warn-to-log # Push the commit to this branch.
+  commit:
+    message: js-warn-to-log
+  published: false
