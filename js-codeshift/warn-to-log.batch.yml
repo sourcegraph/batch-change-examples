@@ -5,7 +5,6 @@ description: Replace console.warn by console.log
 on:
   - repositoriesMatchingQuery: console.warn
 
-# Any version (the :[] syntax) will be changed to 2.0.0. We could also match a specific version.
 steps:
     - run: npx jscodeshift -t /warn-to-log.ts . --extensions js,ts --parser=ts
       container: malomarrec/codeshift
