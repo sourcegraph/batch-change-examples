@@ -1,0 +1,23 @@
+name: run-openrewrite
+description: Run Java refactor with openrewrite
+
+# Repositories containing this package
+on:
+  - repository: github.com/malomarrec/spring-petclinic-migration
+
+# Any version (the :[] syntax) will be changed to 2.0.0. We could also match a specific version.
+# ls cat ./add_to_build.gradle &>> /work/build.gradle
+steps:
+    - run: cat /home/gradle/add_to_build.gradle &>> /work/build.gradle;
+           gradle -version > log0;
+           ./gradlew rewriteRun > /work/log
+      container: malomarrec/openrewrite-gradle
+
+
+changesetTemplate:
+  title: Run Java refactor with openrewrite
+  body: Run Java refactor with openrewrite
+  branch: batch-changes/run-openrewrite
+  commit:
+    message: run-openrewrite
+  published: false
