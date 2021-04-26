@@ -14,3 +14,5 @@ Take a look at the [Sourcegraph documentation on Batch Changes](https://docs.sou
 - [Open GitHub tickets alongside changesets (declarative)](github-issues/README.md)
 - [Update the Docker Hub username in Circle CI configurations](update-circle-ci-config/update-circle-ci-config.batch.yaml)
 - [Update deprecated GraphQL API query](update-api-query/replace-viewer-configuration.yaml)
+- [Migrate from Python 2 to 3](python-refactor/README.md)
+- [Update package.json for NPM dependencies] (npm-package-update/README.md)
