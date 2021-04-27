@@ -11,16 +11,14 @@ description: Use NPM to update dependencies in package.json.
 # NPM Update.
 
 on:
-  - repositoriesMatchingQuery: patternType:regexp file:package.json repo:sourcegraph-testing/docker-image-pin$
+  - repositoriesMatchingQuery: patternType:regexp file:package.json 
 
 # In each repository
 steps:
   - run: |
-      apk add --update nodejs npm 
       npm install -g npm-check-updates 
       ncu -u
-    container: alpine:3
-
+    container: node:16-alpine
 # Describe the changeset (e.g., GitHub pull request) you want for each repository.
 changesetTemplate:
   title: Update outdated npm modules
