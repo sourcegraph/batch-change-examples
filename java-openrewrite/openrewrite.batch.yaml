@@ -1,0 +1,42 @@
+name: run-openrewrite
+description: |
+  This batch change adds the [Rewrite](https://github.com/openrewrite/rewrite)
+  plugin to `build.gradle` files along with the "AutoFormat" recipe. It then
+  executes the rewrite.
+
+on:
+  - repositoriesMatchingQuery: repo:github.com/openrewrite/spring-petclinic-migration file:build.gradle fork:yes
+
+steps:
+  # Use comby to rewrite all build.gradle files found by the search query above
+  # to include the "org.openrewrite.rewrite" plugin.
+  - run: |
+      comby -in-place \
+        "plugins { :[oldPlugins] }" \
+        'plugins {
+          :[oldPlugins]
+          id("org.openrewrite.rewrite").version("4.3.2")
+      }' \
+        -f ${{ join repository.search_result_paths "," }}
+    container: comby/comby
+  # Then append the "rewrite" recipe to the end of the same files.
+  - run: |
+      cat << EOF | tee -a ${{ join repository.search_result_paths " " }} >/dev/null
+      rewrite {
+          activeRecipe("org.openrewrite.java.format.AutoFormat")
+      }
+      EOF
+    container: alpine:3
+  # Run the rewrite
+  - run: ./gradlew rewriteRun
+    container: gradle:7.0-jdk8
+
+changesetTemplate:
+  title: Run Rewrite AutoFormat recipe
+  body: |
+    Use openrewrite's Rewrite to autoformat Java files by adding the
+    `"org.openrewrite.rewrite"` plugin and running the `AutoFormat` recipe.
+  branch: batch-changes/run-openrewrite
+  commit:
+    message: run-openrewrite
+  published: false
