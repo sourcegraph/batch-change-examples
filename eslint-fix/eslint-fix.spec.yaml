@@ -1,0 +1,39 @@
+name: eslint-fix
+description: Run `eslint --fix` in repositories with `eslintrc[.js]` files.
+
+on:
+  - repositoriesMatchingQuery: file:^.eslintrc[\.js|\.json]?
+
+steps:
+  # Dynamically print a YAML object on standard out with information about
+  # which package manager is used.
+  # We can use this to execute different steps.
+  - run: |
+      echo "usesYarn: $(test -f yarn.lock && echo true || echo false)" &&
+      echo "usesNPM: $(test -f package-lock.json && echo true || echo false)"
+    container: alpine:3
+    outputs:
+      packageManagers:
+        value: ${{ step.stdout }}
+        format: yaml
+  # Use yarn to run eslint --fix if we detected yarn before.
+  # exit 0 in any case, because we want the fixes, even though there might
+  # still be warnings/errors.
+  - run: yarn && yarn run eslint --fix --ext .js,.jsx,.ts,.tsx . || exit 0
+    if: ${{ outputs.packageManagers.usesYarn }}
+    container: node:15.0
+  # Use npm if we detected npm.
+  - run: |
+      npm config set package-lock false \
+        && npm install \
+        && npm run eslint --fix --ext .js,.jsx,.ts,.tsx . || exit 0
+    if: ${{ outputs.packageManagers.usesNPM }}
+    container: node:15.0
+
+changesetTemplate:
+  title: Run eslint --fix
+  body: The changes here were produced by running `eslint --fix`
+  commit:
+    message: Run `eslint --fix` in the directories
+  branch: batch-changes/eslint-fix
+  published: false
