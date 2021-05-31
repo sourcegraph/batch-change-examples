@@ -1,0 +1,25 @@
+name: eslint-fix
+description: Run `eslint --fix` in repositories with `eslintrc[.js]` files.
+
+on:
+  - repositoriesMatchingQuery: file:^.eslintrc[\.js|\.json]?
+
+steps:
+  # Check whether `yarn.lock` exists and if so, use yarn. Otherwise npm.
+  - run: |
+      if [ -f yarn.lock ]; then
+        yarn && yarn run eslint --fix --ext .js,.jsx,.ts,.tsx . || exit 0
+      else
+        npm config set package-lock false \
+          && npm install \
+          && npm run eslint --fix --ext .js,.jsx,.ts,.tsx . || exit 0
+      fi
+    container: node:15.0
+
+changesetTemplate:
+  title: Run eslint --fix
+  body: The changes here were produced by running `eslint --fix`
+  commit:
+    message: Run `eslint --fix` in the directories
+  branch: batch-changes/eslint-fix
+  published: false
