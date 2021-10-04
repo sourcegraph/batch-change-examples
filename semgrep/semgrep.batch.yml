@@ -1,0 +1,22 @@
+name: run-semgrep
+description: Run semgrep autofix on vulnerable test projects
+
+on:
+  # Running on a named list of repositories. Use repositoriesMatchingQuery to use a search
+  - repository: github.com/juice-shop/juice-shop
+  - repository: github.com/we45/Vulnerable-Flask-App
+  - repository: github.com/dineshshetty/Android-InsecureBankv2
+
+steps: # repositories are cloned and available at /work
+  - run: semgrep --config p/security-audit --autofix /work
+    container: returntocorp/semgrep
+
+changesetTemplate:
+  title: Run semgrep autofix
+  body: Runs semgprep autofix
+  branch: semgrep-autofix
+  commit:
+    message: run semgrep autofix
+
+  # Change published to true once you're ready to create changesets on the code host.
+  published: false
