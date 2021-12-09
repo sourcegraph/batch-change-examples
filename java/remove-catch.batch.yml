@@ -1,0 +1,17 @@
+name: java-remove-catch
+description: Find try-catch-finally statements where the catch statement has no body (the catch clause could be omitted)
+
+on:
+  - repositoriesMatchingQuery: try {:[a]} catch (:[e]) { } finally {:[b]} lang:java patterntype:structural
+
+steps:
+    - run: comby -in-place 'try {:[a]} catch (:[e]) { } finally {:[b]}' 'try {:[a]} finally {:[b]}' ${{ join repository.search_result_paths " " }}
+      container: comby/comby
+
+changesetTemplate:
+  title: Remove empty catch statements
+  body: Find try-catch-finally statements where the catch statement has no body (the catch clause could be omitted)
+  branch: batch-changes/remove-catch
+  commit:
+    message: remove-catch-statement
+  published: true
