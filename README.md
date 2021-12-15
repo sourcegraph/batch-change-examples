@@ -16,3 +16,4 @@ Take a look at the [Sourcegraph documentation on Batch Changes](https://docs.sou
 - [Update deprecated GraphQL API query](update-api-query/replace-viewer-configuration.yaml)
 - [Migrate from Python 2 to 3](python-refactor/README.md)
 - [Update package.json for NPM dependencies](npm-package-update/README.md)
+- [Rewrite `interface{}` to `any` in Go 1.18 code](go-interface-to-any/interface-to-any.spec.yml)
