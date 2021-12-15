@@ -1,6 +1,6 @@
 # Batch Changes examples
 
-Example batch specs to get you started with Batch Changes
+Example batch specs to get you started with Batch Changes. Contributions welcome!
 
 ## Getting started
 
