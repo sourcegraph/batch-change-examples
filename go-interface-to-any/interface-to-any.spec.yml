@@ -1,0 +1,22 @@
+name: interface-to-any
+description: |
+  This batch spec rewrites `interface{}` to `any`, the new type alias introduced with Go.18
+on:
+  - repositoriesMatchingQuery: lang:go interface{}
+
+steps:
+  - run: |
+      results="${{ join repository.search_result_paths "\n" }}"
+      for result in $results;
+      do
+        echo "Rewriting ${result}"
+        gofmt -w -r 'interface{} -> any' "${result}"
+      done;
+    container: golang
+
+changesetTemplate:
+  title: "Go 1.18: rewrite `interface{}` to `any`"
+  body: Rewrites `interface{}` to `any` using `gofmt`
+  branch: batches/interface-to-any
+  commit:
+    message: Rewrites `interface{}` to `any` using `gofmt`
