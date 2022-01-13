@@ -1,0 +1,42 @@
+name: pin-colors-3
+description: Add Hello World to READMEs
+
+# Find all repositories that contain a README.md file.
+on:
+  - repositoriesMatchingQuery: file:package.json colors count:10
+
+# In each repository, run this command. Each repository's resulting diff is captured.
+steps:
+  - run: |
+      for result in "${{ join repository.search_result_paths " " }}"; do
+              python /tmp/script "${result}"
+            done;
+    container: python:3-slim
+    files:
+      /tmp/script: |
+        import json
+        import sys
+        try:
+            package = None
+            file = sys.argv[1]
+
+            with  open(file) as f:
+                package = json.loads(f.read())
+                if 'resolutions' in package:
+                    package['resolutions']['colors']="1.4.0"
+                else:
+                    package['resolutions'] = {"colors":"1.4.0"}
+
+            with open(file, "w") as f:
+                f.write(json.dumps(package, indent=4))
+        except Exception as e:
+            print("No-op:error {}".format(e))    
+
+changesetTemplate:
+  title: Hello World
+  body: My first batch change!
+  branch: hello-world # Push the commit to this branch.
+  published: false
+  commit:
+    message: Append Hello World to all README.md files
+  
