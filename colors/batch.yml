@@ -8,7 +8,6 @@ on:
 steps:
   - run: |
       for result in "${{ join repository.search_result_paths " " }}"; do
-        echo "${result}" >> test.txt;
         python /tmp/script "${result}";
       done;
     container: python:3-slim
@@ -33,7 +32,7 @@ steps:
                 f.write(json.dumps(package, indent=2))
         except Exception as e:
             print("No-op:error {}".format(e))
-            
+
 changesetTemplate:
   title: Force colors to use 1.4.0
   body: Force colors to use 1.4.0 to avoid infinite loop
