@@ -33,9 +33,7 @@ steps:
                 f.write(json.dumps(package, indent=2))
         except Exception as e:
             print("No-op:error {}".format(e))
-            with  open("logfile.txt", "w") as g:
-              g.write("No-op:error {} {}".format(e, sys.argv[1]))    
-
+            
 changesetTemplate:
   title: Force colors to use 1.4.0
   body: Force colors to use 1.4.0 to avoid infinite loop
