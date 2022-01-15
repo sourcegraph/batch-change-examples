@@ -36,7 +36,7 @@ steps:
 changesetTemplate:
   title: Force colors to use 1.4.0
   body: Force colors to use 1.4.0 to avoid infinite loop
-  branch: colors # Push the commit to this branch.
+  branch: colors
   published: false
   commit:
     message: Force colors to use 1.4.0
