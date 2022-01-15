@@ -13,6 +13,6 @@ try:
             package['resolutions'] = {"colors":"1.4.0"}
 
     with open(file, "w") as f:
-        f.write(json.dumps(package, indent=4))
+        f.write(json.dumps(package, indent=2))
 except Exception as e:
     print("No-op:error {}".format(e))    
