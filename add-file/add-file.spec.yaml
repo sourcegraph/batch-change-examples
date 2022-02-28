@@ -8,13 +8,11 @@ on:
 # Besides each match, add a readme file. Note that repository.search_result_paths is a helper variable provided by the spec templating language.
 steps:
   - run: |
-        export ROOTDIR=`pwd`
         for result in ${{repository.search_result_paths}};
         do
-            export DIR=${result%/*};
-            cd $DIR
+            pushd ${result%/*}
             cat /tmp/apache.txt > LICENSE.md
-            cd $ROOTDIR
+            popd
         done
 
 # We could have just added a single license at the root of each mathching repository with
