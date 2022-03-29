@@ -1,0 +1,28 @@
+name: combine-functions-parameters
+description: |
+  This batch change uses [Comby](https://comby.dev) to combine function parameters of the same type
+
+on:
+  - repositoriesMatchingQuery: lang:go (:[[a]] :[[type]], :[[b]] :[[type]]) patterntype:structural count:1
+  - repositoriesMatchingQuery: lang:go (:[[a]] :[[type]], :[[b]] :[[type]], :[[c]] :[[type]]) patterntype:structural count:1
+  - repositoriesMatchingQuery: lang:go (:[[a]] :[[type]], :[[b]] :[[type]], :[[c]] :[[type]], :[[d]] :[[type]]) patterntype:structural count:1
+  - repositoriesMatchingQuery: lang:go (:[[a]] :[[type]], :[[b]] :[[type]], :[[c]] :[[type]], :[[d]] :[[type]], :[[e]] :[[type]]) patterntype:structural count:1
+  - repositoriesMatchingQuery: lang:go (:[[a]] :[[type]], :[[b]] :[[type]], :[[c]] :[[type]], :[[d]] :[[type]], :[[e]] :[[type]], :[[f]] :[[type]]) patterntype:structural count:1
+
+steps:
+  - run: |
+      comby -in-place '(:[[a]] :[[type]], :[[b]] :[[type]])' '(:[[a]], :[[b]] :[[type]])' .go -matcher .go -exclude-dir .,vendor;
+      comby -in-place '(:[[a]] :[[type]], :[[b]] :[[type]]), :[[c]] :[[type]]' '(:[[a]], :[[b]], :[[c]] :[[type]])' .go -matcher .go -exclude-dir .,vendor;
+      comby -in-place '(:[[a]] :[[type]], :[[b]] :[[type]], :[[c]] :[[type]], :[[d]] :[[type]])' '(:[[a]], :[[b]], :[[c]], :[[d]] :[[type]])' .go -matcher .go -exclude-dir .,vendor;
+      comby -in-place '(:[[a]] :[[type]], :[[b]] :[[type]], :[[c]] :[[type]], :[[d]] :[[type]], :[[e]] :[[type]])' '(:[[a]], :[[b]], :[[c]], :[[d]], :[[e]] :[[type]])' .go -matcher .go -exclude-dir .,vendor;
+      comby -in-place '(:[[a]] :[[type]], :[[b]] :[[type]], :[[c]] :[[type]], :[[d]] :[[type]], :[[e]] :[[type]], :[[f]] :[[type]])' '(:[[a]], :[[b]], :[[c]], :[[d]], :[[e]], :[[f]] :[[type]])' .go -matcher .go -exclude-dir .,vendor;
+    container: comby/comby
+
+# Describe the changeset (e.g., GitHub pull request) you want for each repository.
+changesetTemplate:
+  title: Combine type declaration in function parameters
+  body: This batch change combines type declaration in function parameters, when declarations for the same type are contiguous, and for a maximum of 7 parameters.
+  branch: go-autofix/combine-parameters # Push the commit to this branch.
+  commit:
+    message: Combine function parameter type declaration
+
