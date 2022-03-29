@@ -3,11 +3,11 @@ description: |
   This batch change uses [Comby](https://comby.dev) to combine function parameters of the same type
 
 on:
-  - repositoriesMatchingQuery: lang:go (:[[a]] :[[type]], :[[b]] :[[type]]) patterntype:structural count:1
-  - repositoriesMatchingQuery: lang:go (:[[a]] :[[type]], :[[b]] :[[type]], :[[c]] :[[type]]) patterntype:structural count:1
-  - repositoriesMatchingQuery: lang:go (:[[a]] :[[type]], :[[b]] :[[type]], :[[c]] :[[type]], :[[d]] :[[type]]) patterntype:structural count:1
-  - repositoriesMatchingQuery: lang:go (:[[a]] :[[type]], :[[b]] :[[type]], :[[c]] :[[type]], :[[d]] :[[type]], :[[e]] :[[type]]) patterntype:structural count:1
-  - repositoriesMatchingQuery: lang:go (:[[a]] :[[type]], :[[b]] :[[type]], :[[c]] :[[type]], :[[d]] :[[type]], :[[e]] :[[type]], :[[f]] :[[type]]) patterntype:structural count:1
+  - repositoriesMatchingQuery: lang:go (:[[a]] :[[type]], :[[b]] :[[type]]) patterntype:structural
+  - repositoriesMatchingQuery: lang:go (:[[a]] :[[type]], :[[b]] :[[type]], :[[c]] :[[type]]) patterntype:structural
+  - repositoriesMatchingQuery: lang:go (:[[a]] :[[type]], :[[b]] :[[type]], :[[c]] :[[type]], :[[d]] :[[type]]) patterntype:structural
+  - repositoriesMatchingQuery: lang:go (:[[a]] :[[type]], :[[b]] :[[type]], :[[c]] :[[type]], :[[d]] :[[type]], :[[e]] :[[type]]) patterntype:structural
+  - repositoriesMatchingQuery: lang:go (:[[a]] :[[type]], :[[b]] :[[type]], :[[c]] :[[type]], :[[d]] :[[type]], :[[e]] :[[type]], :[[f]] :[[type]]) patterntype:structural
 
 steps:
   - run: |

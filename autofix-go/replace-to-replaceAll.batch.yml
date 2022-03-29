@@ -3,7 +3,7 @@ description: |
   This batch change uses [Comby](https://comby.dev) to replace the deprecated String.replaceAll(a,b,c,-1) by String.Replace(a,b,c)
 
 on:
-  - repositoriesMatchingQuery: context:@malo/sourcegraph .Replace(..., ..., -1) lang:go patternType:structural count:100
+  - repositoriesMatchingQuery: context:@malo/sourcegraph .Replace(..., ..., -1) lang:go patternType:structural
 
 steps:
   - run: comby -in-place '.Replace(:[a],:[b],:[c],...)' '.ReplaceAll(:[a],:[b],:[c])' .go -matcher .go -exclude-dir .,vendor
