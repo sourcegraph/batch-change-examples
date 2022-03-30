@@ -6,7 +6,7 @@ on:
   - repositoriesMatchingQuery: .Replace(..., ..., -1) lang:go patternType:structural
 
 steps:
-  - run: comby -in-place '.Replace(:[a],:[b],:[c],...)' '.ReplaceAll(:[a],:[b],:[c])' .go -matcher .go -exclude-dir .,vendor
+  - run: comby -in-place '.Replace(:[a],:[b],:[c], -1)' '.ReplaceAll(:[a],:[b],:[c])' .go -matcher .go -exclude-dir .,vendor
     container: comby/comby
 
 # Describe the changeset (e.g., GitHub pull request) you want for each repository.
