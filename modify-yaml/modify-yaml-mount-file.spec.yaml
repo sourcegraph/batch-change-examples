@@ -1,0 +1,32 @@
+# This spec requires Sourcegraph 3.41 and above.
+
+name: docker-compose-debug-entrypoint
+description: Modify `docker-compose.yaml` files to add the `--debug` argument to `services.entrypoint`s if an `entrypoint` is defined.
+
+on:
+  - repositoriesMatchingQuery: 'file:docker-compose.yaml entrypoint: count:10'
+
+steps:
+  - run: |
+      for result in "${{ join repository.search_result_paths " " }}"; do
+        ruby /tmp/update.rb "${result}" > "${result}.new"
+        mv "${result}.new" "${result}"
+      done;
+    container: ruby
+    mount:
+      - path: ./update-yaml.rb
+        mountpoint: /tmp/update.rb
+  - run: |
+      npm install -g prettier &&
+      (npx prettier --write "${{ join previous_step.modified_files " "}}" || exit 0)
+    container: node
+
+changesetTemplate:
+  title: Add `--debug` to entrypoints in docker-compose.yaml
+  body: |
+    This adds the `--debug` flag to all service entrypoints in the
+    `docker-compose.yaml`, if they have a `entrypoint` defined.
+  branch: batch-changes/docker-compose-debug-entrypoint
+  published: false
+  commit:
+    message: Add `--debug` to existing `entrypoint`s in `docker-compose.yaml`
