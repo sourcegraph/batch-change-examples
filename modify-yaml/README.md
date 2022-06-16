@@ -11,5 +11,5 @@ format the files that were rewritten by the previous step.
 
 There are three main ways to pass long scripts to a batch change:
 - add the script in the spec using the `file` property, see [modify-yaml](modify-yaml.spec.yaml)
-- from Sourcegraph 3.41, mount a local script on the container, see [modify-yaml](modify-yaml-mount-file.spec.yaml)
+- from Sourcegraph 3.41, mount a local script on the container, see [modify-yaml-mount-file](modify-yaml-mount-file.spec.yaml)
 - bake them inside the container
