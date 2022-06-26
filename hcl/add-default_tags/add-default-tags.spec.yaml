@@ -1,0 +1,41 @@
+# This batch change uses comby to add default tags to Terraform locals.tf file
+# The comby replace patterns are stored in a TOML file for convenience https://comby.dev/docs/configuration#toml-format
+
+name: add-repo-tags
+description: |
+  Use comby to add the repository name as a ServiceName tag
+
+on:
+  - repositoriesMatchingQuery: file:locals.tf$ lang:HCL tag not ServiceName
+
+steps:
+  - run: |
+      comby -in-place -config  /tmp/patterns.toml;
+      ls
+    container: comby/comby
+    files: # comby patterns can be listed out in a file
+      /tmp/patterns.toml: |
+        [pattern]
+        match='''locals {
+            name = :[name]
+            default_tags = {:[block]
+            }
+        }'''
+
+        rewrite='''locals {
+            name = :[name]
+            default_tags = {:[block]
+            Repository = "${{repository.name}}"
+            }
+        }'''
+  - run: terraform fmt # use your usual formatter
+    container: hashicorp/terraform:latest
+
+
+# Describe the changeset (e.g., GitHub pull request) you want for each repository.
+changesetTemplate:
+  title: Add ServiceName tag
+  body: Use comby to add the repository name as a ServiceName tag
+  branch: batches/add-servicename-tag
+  commit:
+    message: Add service name tag

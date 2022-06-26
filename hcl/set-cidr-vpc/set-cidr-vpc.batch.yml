@@ -1,0 +1,31 @@
+# This batch change is a toy example of using https://github.com/minamijoyo/hcledit to edit Terraform files
+# It can be a good alternative of comby for some use cases as it allows to easily select elements to change
+# It comes with some limitations and cannot be used to set attributes to objects or lists (https://github.com/minamijoyo/hcledit/issues)
+
+name: set-cidr_block
+description: Set CIDR blocks in aws_vcp resources to some value
+
+on:
+  - repositoriesMatchingQuery: lang:HCl aws_vpc count:100
+
+steps:
+  - run: echo "Hello world"
+    container: alpine:3
+  - run: pwd
+    container: malomarrec/hcledit:amd64
+  - run: |
+      results="${{ join repository.search_result_paths "\n" }}"
+      for result in $results; do
+        vpcs=$(hcledit block list  -f $result | grep '\.aws_vpc\.')
+          for vpc in $vpcs; do
+            hcledit attribute set "${vpc}.cidr_block" '"10.0.1.0/24"' -f $result -u
+          done
+      done
+    container: malomarrec/hcledit:amd64
+
+changesetTemplate:
+  title: Set aws_vpc CIDR blocks
+  body: Set aws_vpc CIDR blocks to some value
+  branch: batch/set-cidr
+  commit:
+    message: Set aws_vpc CIDR blocks to some value
