@@ -1,0 +1,18 @@
+name: replace-to-replaceAll
+description: |
+  This batch change uses [Comby](https://comby.dev) to replace the deprecated String.replaceAll(a,b,c,-1) by String.Replace(a,b,c)
+
+on:
+  - repositoriesMatchingQuery: strings.Replace(..., ..., -1) lang:go patternType:structural
+
+steps:
+  - run: comby -in-place 'strings.Replace(:[a],:[b],:[c], -1)' 'strings.ReplaceAll(:[a],:[b],:[c])' .go -matcher .go -exclude-dir .,vendor
+    container: comby/comby
+
+# Describe the changeset (e.g., GitHub pull request) you want for each repository.
+changesetTemplate:
+  title: Replace outdated replace( a, b, c, -1) by replaceAll
+  body: This batch change uses comby to replace the deprecated replace( a, b, c, -1) by replaceAll
+  branch: go-autofix/replaceAll # Push the commit to this branch.
+  commit:
+    message: Replace replace( , -1) by replaceAll

@@ -1,0 +1,18 @@
+name: remove-expensive-string-comparison
+description: |
+  This batch change uses [Comby](https://comby.dev) to remove [expensive string comparisons](https://about.sourcegraph.com/blog/code-search-turned-code-checker/)
+
+on:
+  - repositoriesMatchingQuery: if strings.ToLower(:[[a]]) == strings.ToLower(:[[b]]) patternType:structural count:1
+
+steps:
+  - run: comby -in-place 'if strings.ToLower(:[[a]]) == strings.ToLower(:[[b]])' 'if strings.EqualFold(:[a],:[b])' .go -matcher .go -exclude-dir .,vendor
+    container: comby/comby
+
+# Describe the changeset (e.g., GitHub pull request) you want for each repository.
+changesetTemplate:
+  title: Replace expensive string comparisons
+  body: This batch change replaces expensive string comparisons by a more [optimized](https://about.sourcegraph.com/blog/code-search-turned-code-checker/) comparison using strings.EqualFold.
+  branch: go-autofix/expensive-stringcomparison # Push the commit to this branch.
+  commit:
+    message: Make string comparison less expensive
