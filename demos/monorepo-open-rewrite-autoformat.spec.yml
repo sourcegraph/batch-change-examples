@@ -1,0 +1,83 @@
+name: monorepo-open-rewrite-autoformat
+description: |
+  This batch change adds the [Rewrite](https://github.com/openrewrite/rewrite)
+  plugin to `build.gradle` files along with the "AutoFormat" recipe. It then
+  executes the rewrite.
+on:
+  - repository: github.com/malomarrec/resilience4j
+    branch: mm/add-orw
+
+workspaces:
+  - rootAtLocationOf: package.json
+    in: "*"
+
+steps:
+  - run: cat gradle.properties; ./gradlew rewriteRun
+    container: gradle:7.4.2-jdk11
+
+transformChanges:
+  group:
+  - directory: resilience4j-all 
+    branch: resilience4j-all-batch
+  - directory: resilience4j-annotations 
+    branch: resilience4j-annotations-batch
+  - directory: resilience4j-bom 
+    branch: resilience4j-bom-batch
+  - directory: resilience4j-bulkhead 
+    branch: resilience4j-bulkhead-batch
+  - directory: resilience4j-cache 
+    branch: resilience4j-cache-batch
+  - directory: resilience4j-circuitbreaker 
+    branch: resilience4j-circuitbreaker-batch
+  - directory: resilience4j-circularbuffer 
+    branch: resilience4j-circularbuffer-batch
+  - directory: resilience4j-consumer 
+    branch: resilience4j-consumer-batch
+  - directory: resilience4j-core 
+    branch: resilience4j-core-batch
+  - directory: resilience4j-feign 
+    branch: resilience4j-feign-batch
+  - directory: resilience4j-framework-common 
+    branch: resilience4j-framework-common-batch
+  - directory: resilience4j-hedge 
+    branch: resilience4j-hedge-batch
+  - directory: resilience4j-kotlin 
+    branch: resilience4j-kotlin-batch
+  - directory: resilience4j-metrics 
+    branch: resilience4j-metrics-batch
+  - directory: resilience4j-micrometer 
+    branch: resilience4j-micrometer-batch
+  - directory: resilience4j-micronaut 
+    branch: resilience4j-micronaut-batch
+  - directory: resilience4j-ratelimiter 
+    branch: resilience4j-ratelimiter-batch
+  - directory: resilience4j-reactor 
+    branch: resilience4j-reactor-batch
+  - directory: resilience4j-retry 
+    branch: resilience4j-retry-batch
+  - directory: resilience4j-rxjava2 
+    branch: resilience4j-rxjava2-batch
+  - directory: resilience4j-rxjava3 
+    branch: resilience4j-rxjava3-batch
+  - directory: resilience4j-spring 
+    branch: resilience4j-spring-batch
+  - directory: resilience4j-spring-boot2 
+    branch: resilience4j-spring-boot2-batch
+  - directory: resilience4j-spring-cloud2 
+    branch: resilience4j-spring-cloud2-batch
+  - directory: resilience4j-test 
+    branch: resilience4j-test-batch
+  - directory: resilience4j-timelimiter 
+    branch: resilience4j-timelimiter-batch
+  - directory: resilience4j-vavr 
+    branch: resilience4j-vavr-batch
+
+changesetTemplate:
+  title: Run Rewrite AutoFormat recipe
+  body: |
+    Use openrewrite's Rewrite to autoformat Java files by adding the
+    `"org.openrewrite.rewrite"` plugin and running the `AutoFormat` recipe.
+  branch: batch-changes/run-openrewrite
+  commit:
+    message: run-openrewrite
+  published: false

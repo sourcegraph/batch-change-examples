@@ -1,0 +1,28 @@
+name: testing-codemod--icon
+description: |
+  This batch change runs the icon library migration rewrite
+on:
+  # limitation: the web directory is too big, so we'd like to split the PR into smaller PRs
+  - repository: github.com/sourcegraph/sourcegraph
+
+workspaces:
+  - rootAtLocationOf: package.json
+    in: "*"
+
+steps:
+  - run: |
+      if [[ $(pwd) = "/work" ]]; then
+        echo "This is the root workspace, skipping"
+      else
+        yarn --cwd / transform --write -t 'packages/transforms/src/mdiIconToMdiPath/mdiIconToMdiPath.ts' "${PWD}/**/*.tsx"
+      fi
+    container: malomarrec/sg-codemod
+
+changesetTemplate:
+  title: Codemod - mdiIcon to mdiPath
+  body: |
+    Codemod: migrate from mdiIcon to mdiPath
+  branch: batch-changes/midIcon-mdiPath/${{ replace steps.path "/" "-" }}
+  commit:
+    message: migrate from mdiIcon to mdiPath
+  published: false
