@@ -7,10 +7,6 @@ on:
   - repository: github.com/malomarrec/resilience4j
     branch: mm/add-orw
 
-workspaces:
-  - rootAtLocationOf: package.json
-    in: "*"
-
 steps:
   - run: cat gradle.properties; ./gradlew rewriteRun
     container: gradle:7.4.2-jdk11
