@@ -1,4 +1,4 @@
-name: replace-viewer-configuration.spec.yaml
+name: replace-viewer-configuration.batch.yaml
 
 description: Updates GraphQL queries using deprecated viewerConfiguration to viewerSettings
 

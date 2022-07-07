@@ -10,6 +10,6 @@ It then uses a second container to install [prettier](https://prettier.io/) to
 format the files that were rewritten by the previous step.
 
 There are three main ways to pass long scripts to a batch change:
-- add the script in the spec using the `file` property, see [modify-yaml](modify-yaml.spec.yaml)
-- from Sourcegraph 3.41, mount a local script on the container, see [modify-yaml-mount-file](modify-yaml-mount-file.spec.yaml)
+- add the script in the spec using the `file` property, see [modify-yaml](modify-yaml.batch.yaml)
+- from Sourcegraph 3.41, mount a local script on the container, see [modify-yaml-mount-file](modify-yaml-mount-file.batch.yaml)
 - bake them inside the container

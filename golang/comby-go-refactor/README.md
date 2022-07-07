@@ -42,8 +42,8 @@ changesetTemplate:
   published: true
 ```
 
-Save as `batch-spec.yaml` and execute
+Save as `batch-batch.yaml` and execute
 
 ```
-src batch preview -f batch-spec.yaml -namespace <your-user-or-org-name>
+src batch preview -f batch-batch.yaml -namespace <your-user-or-org-name>
 ```
