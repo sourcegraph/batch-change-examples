@@ -1,0 +1,25 @@
+name: replace-viewer-configuration.batch.yaml
+
+description: Updates GraphQL queries using deprecated viewerConfiguration to viewerSettings
+
+# Search for repositories containing a GraphQL API query using the deprecated viewerConfiguration query 
+on:
+  - repositoriesMatchingQuery: repo:github.com/sourcegraph/sourcegraph viewerConfiguration lang:typescript
+# In each repository
+steps:
+  # replace the deprecated query with viewerSettings 
+  - run: |
+      for file in "${{ join repository.search_result_paths " " }}";
+      do
+        sed -i 's/viewerConfiguration/viewerSettings/g;' ${file}
+      done
+    container: alpine:3
+# Describe the changeset (e.g., GitHub pull request) you want for each repository.
+changesetTemplate:
+  title: Use new `viewerSettings` instead of `viewerConfiguration`
+  body: This change replaces the deprecated usage of `viewerConfiguration` with `viewerSettings`
+  branch: batch-change/viewer-settings
+  commit:
+    message: Use new `viewerSettings` instead of `viewerConfiguration`
+  published: false 
+

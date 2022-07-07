@@ -1,0 +1,36 @@
+name: templated-and-files
+description: Use template variables and mount files in batch change specs
+
+on:
+  - repositoriesMatchingQuery: repo:automation-testing lang:go fmt.Sprintf("%d", :[v]) patterntype:structural -file:vendor count:5
+
+steps:
+  # Run comby over the search results in each repository:
+  - run: comby -in-place -config /tmp/go-sprintf.toml -f ${{ join repository.search_result_paths "," }}
+    container: comby/comby
+    files:
+      # Create files inside the container by specifying path and content here:
+      /tmp/go-sprintf.toml: |
+        [sprintf_to_strconv]
+        match='fmt.Sprintf("%d", :[v])'
+        rewrite='strconv.Itoa(:[v])'
+
+  - run: echo "comby found the following problems:" >> CHANGELOG.md && cat /tmp/comby-output.txt >> CHANGELOG.md
+    container: alpine:3
+    files:
+      # files also support templating:
+      /tmp/comby-output.txt: ${{ previous_step.stdout }}
+
+  - run: echo $MY_MODIFIED_FILES >> modified_files.txt
+    container: alpine:3
+    env:
+      # env vars also support templating:
+      MY_MODIFIED_FILES: ${{ join previous_step.modified_files "\n" }}
+
+changesetTemplate:
+  title: templated-and-files
+  body: My not-first batch change!
+  branch: batch-changetesting-files
+  commit:
+    message: Code your code with templates
+  published: false
