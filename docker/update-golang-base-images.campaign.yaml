@@ -31,7 +31,7 @@ steps:
 changesetTemplate:
   title: Update golang base images in Dockerfiles to 1.15
   body: This updates golang base images used in Dockerfiles from golang:1.10 to 1.14 to use golang:1.15.
-  branch: batch changes/golang-15-base-images # Push the commit to this branch.
+  branch: batch-changes/golang-15-base-images # Push the commit to this branch.
   commit:
     message: Update golang base images in Dockerfiles to 1.15
   published: false

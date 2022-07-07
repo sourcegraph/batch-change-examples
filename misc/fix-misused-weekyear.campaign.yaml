@@ -14,7 +14,7 @@ changesetTemplate:
   title: Update misue of YYYY weekyear for calendar year yyyy.
   body: >
     Week year is intended to be used for week dates, eg 2015-W01-1, it is often mistakenly used for calendar dates, in which case the year may be incorrect during the last week of the year 
-  branch: batch-changefix-misused-weekyear
+  branch: batch-change/fix-misused-weekyear
   commit:
     message: Update misue of YYYY weekyear for calendar year yyyy.
   published: true

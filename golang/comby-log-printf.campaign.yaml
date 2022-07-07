@@ -40,7 +40,7 @@ changesetTemplate:
     ```
     log15.Warn("Add as a temporary child of root", "t.Span.ID,", t.Span.ID, "root.Span.ID", root.Span.ID)
     ```
-  branch: batch changes/sprintf-to-itoa
+  branch: batch-changes/sprintf-to-itoa
   commit:
     message: Replacing fmt.Sprintf with strconv.Iota
     author:

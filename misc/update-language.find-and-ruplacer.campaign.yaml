@@ -27,7 +27,7 @@ steps:
 changesetTemplate:
   title: Replace whitelist/blacklist with allowlist/denylist
   body: This replaces the terms whitelist/blacklist in Markdown files with allowlist/denylist
-  branch: batch changes/allowlist-denylist # Push the commit to this branch.
+  branch: batch-changes/allowlist-denylist # Push the commit to this branch.
   commit:
     message: Replace whitelist/blacklist with allowlist/denylist
   published: false

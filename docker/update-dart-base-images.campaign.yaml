@@ -29,7 +29,7 @@ steps:
 changesetTemplate:
   title: Update google/dart base images in Dockerfiles to 2.10.2
   body: This updates google/dart base images used in Dockerfiles to version 2.10.2
-  branch: batch changes/google-dart-2-10-2-base-images # Push the commit to this branch.
+  branch: batch-changes/google-dart-2-10-2-base-images # Push the commit to this branch.
   commit:
     message: Update google/dart base images in Dockerfiles to 2.10.2
   published:

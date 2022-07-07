@@ -16,7 +16,7 @@ steps:
 changesetTemplate:
   title: Upgrade to bootstrap 5
   body: This upgrades the bootstrap version to v5. Please use this PR to make any adjustments, if necessary. It is tracked in a Souregraph batch change.
-  branch: batch changes/bootstrap-5
+  branch: batch-change/bootstrap-5
   commit:
     message: Upgrade bootstrap to v5
   published: false

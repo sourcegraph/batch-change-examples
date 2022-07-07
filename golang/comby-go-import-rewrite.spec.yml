@@ -22,7 +22,7 @@ steps:
 changesetTemplate:
   title: Fix import path for log15 package
   body: Rewrites Go import paths for the `log15` package from `gopkg.in/inconshreveable/log15.v2` to `github.com/inconshreveable/log15` using [Comby](https://comby.dev/)
-  branch: batch-changerewrite-log15-import
+  branch: batch-change/rewrite-log15-import
   commit:
     message: Fix import path for log15 package
   published: true
