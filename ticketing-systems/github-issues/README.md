@@ -27,7 +27,7 @@ src batch apply -f gh.issues.batch.yml
 ## Getting to know Batch Changes
 
 This spec uses batch spec templating to produce text values inserted in the spec at runtime. They are delimited by `${{` and `}}`.
-For example, one of the campaigns step passes the name of the batch change, to create a corresponding issue. Using the
+For example, one of the batch changes step passes the name of the batch change, to create a corresponding issue. Using the
 `${{batch_change.name}}` statement allows for it to be dynamically read from the spec name, instead of hard coded.
 
 ```
@@ -38,7 +38,7 @@ steps:
 - run: >
       python ../sync-issue.py
       ...
-      # no need to hardcode the campaign name twice!
+      # no need to hardcode the batch change name twice!
       --batch_change_name ${{batch_change.name}}
       ...
 ```

@@ -1,5 +1,5 @@
 name: templated-and-files
-description: Use template variables and mount files in campaign specs
+description: Use template variables and mount files in batch change specs
 
 on:
   - repositoriesMatchingQuery: repo:automation-testing lang:go fmt.Sprintf("%d", :[v]) patterntype:structural -file:vendor count:5
@@ -29,8 +29,8 @@ steps:
 
 changesetTemplate:
   title: templated-and-files
-  body: My not-first campaign!
-  branch: campaign/testing-files
+  body: My not-first batch change!
+  branch: batch-changetesting-files
   commit:
     message: Code your code with templates
   published: false

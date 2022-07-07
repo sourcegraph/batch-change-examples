@@ -1,4 +1,4 @@
-name: thorstens-hello-world-campaign
+name: thorstens-hello-world-batch change
 description: Updated description Hello World to READMEs
 
 # Find all repositories that contain a README.md file.
@@ -13,7 +13,7 @@ steps:
 # Describe the changeset (e.g., GitHub pull request) you want for each repository.
 changesetTemplate:
   title: Hello World
-  body: My first campaign!
+  body: My first batch change!
   branch: thorsten/hello-world # Push the commit to this branch.
   commit:
     message: Append Hello World to all README.md files

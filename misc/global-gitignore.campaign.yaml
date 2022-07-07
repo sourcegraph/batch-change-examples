@@ -26,7 +26,7 @@ steps:
 changesetTemplate:
   title: Ignore editor temp files in .gitignore
   body: This extends the .gitignore file to ignore temp files created by Vim/Emacs/IntelliJ
-  branch: campaigns/ignore-editor-files-no-admin # Push the commit to this branch.
+  branch: batch changes/ignore-editor-files-no-admin # Push the commit to this branch.
   commit:
     message: Ignore editor temp files in .gitignore
   published:

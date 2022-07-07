@@ -17,7 +17,7 @@ steps:
 changesetTemplate:
   title: Update outdated npm modules
   body: Running npm-check-updates
-  branch: campaigns/npm-update # Push the commit to this branch.
+  branch: batch changes/npm-update # Push the commit to this branch.
   commit:
     message: Updating outdated packages in package.json.
   published: false

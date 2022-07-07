@@ -1,5 +1,5 @@
 name: update-golang-base-images
-description: This campaign updates the golang builder images in Dockerfiles to Go 1.15.
+description: This batch change updates the golang builder images in Dockerfiles to Go 1.15.
 
 on:
   # Find all repositories that contain Dockerfiles with `FROM golang:1.MINOR-alpine [...]` in it,
@@ -31,7 +31,7 @@ steps:
 changesetTemplate:
   title: Update golang base images in Dockerfiles to 1.15
   body: This updates golang base images used in Dockerfiles from golang:1.10 to 1.14 to use golang:1.15.
-  branch: campaigns/golang-15-base-images # Push the commit to this branch.
+  branch: batch changes/golang-15-base-images # Push the commit to this branch.
   commit:
     message: Update golang base images in Dockerfiles to 1.15
   published: false

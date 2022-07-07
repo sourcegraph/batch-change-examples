@@ -1,6 +1,6 @@
 name: change-sprintf-to-itoa
 description: |
-  This campaign uses [Comby](https://comby.dev) to replace `fmt.Sprintf` calls
+  This batch change uses [Comby](https://comby.dev) to replace `fmt.Sprintf` calls
   in Go code with the equivalent `strconv.Iota` call.
 
 on:
@@ -14,8 +14,8 @@ steps:
 
 changesetTemplate:
   title: Replace fmt.Sprintf with equivalent strconv.Itoa
-  body: This campaign replaces `fmt.Sprintf` with `strconv.Itoa`
-  branch: thorsten-campaigns/sprintf-to-itoa
+  body: This batch change replaces `fmt.Sprintf` with `strconv.Itoa`
+  branch: thorsten-batch changes/sprintf-to-itoa
   commit:
     message: Replace fmt.Sprintf with strconv.Iota
     author:

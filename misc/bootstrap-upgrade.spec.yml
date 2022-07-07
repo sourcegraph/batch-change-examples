@@ -1,5 +1,5 @@
 name: bootstrap-upgrade
-description: All our applications should look the same, so we want to make them all use the same version of bootstrap. This campaign opens up a joint-effort to make all those upgrades happen in a short time span.
+description: All our applications should look the same, so we want to make them all use the same version of bootstrap. This batch change opens up a joint-effort to make all those upgrades happen in a short time span.
 
 on:
   - repositoriesMatchingQuery: 'f:package.json "bootstrap": ".?4 patterntype:regexp -r:13k -r:ghe -r:gitlab'
@@ -15,8 +15,8 @@ steps:
 
 changesetTemplate:
   title: Upgrade to bootstrap 5
-  body: This upgrades the bootstrap version to v5. Please use this PR to make any adjustments, if necessary. It is tracked in a Souregraph campaign.
-  branch: campaigns/bootstrap-5
+  body: This upgrades the bootstrap version to v5. Please use this PR to make any adjustments, if necessary. It is tracked in a Souregraph batch change.
+  branch: batch changes/bootstrap-5
   commit:
     message: Upgrade bootstrap to v5
   published: false

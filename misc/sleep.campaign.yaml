@@ -11,7 +11,7 @@ steps:
 changesetTemplate:
   title: sleep
   body: sleep
-  branch: campaigns/sleep
+  branch: batch changes/sleep
   commit:
     message: sleep
   published: false

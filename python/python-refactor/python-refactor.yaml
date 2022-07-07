@@ -17,7 +17,7 @@ steps:
 changesetTemplate:
   title: Python conversion
   body: Moving to Python 3
-  branch: campaigns/python-convert # Push the commit to this branch.
+  branch: batch changes/python-convert # Push the commit to this branch.
   commit:
     message: Moving Python 2 to Python 3.
   published: false

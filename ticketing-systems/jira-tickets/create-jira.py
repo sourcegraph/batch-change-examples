@@ -6,7 +6,7 @@ import argparse
 parser = argparse.ArgumentParser(description='Parse jira ticket attributes')
 parser.add_argument("--summary", help="summary of the issue to be created", default="")
 parser.add_argument("--description", help="description of the issue to be created", default="")
-parser.add_argument("--campaign_name", help="description of the issue to be created", default="")
+parser.add_argument("--batch change_name", help="description of the issue to be created", default="")
 parser.add_argument("--jira_sitename", help="Name of your site. Can be found in the site URL https://<mysite>.atlassian.net/", required=True)
 parser.add_argument("--jira_username", help="Jira email address", required=True)
 parser.add_argument("--jira_token", help="Jira API token. ", required=True)
@@ -49,14 +49,14 @@ payload = {
       ]
     },
     "labels": [
-      "sourcegraph-campaigns",
+      "sourcegraph-batch changes",
     ],
   }
 }
 
 
-if len(args.campaign_name) > 0:
-    payload['fields']['labels'].append(args.campaign_name)
+if len(args.batch change_name) > 0:
+    payload['fields']['labels'].append(args.batch change_name)
 
 payload = json.dumps(payload)
 

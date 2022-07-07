@@ -1,5 +1,5 @@
 name: track-important-milestone
-description: Track all changesets related to our important campaigns milestone
+description: Track all changesets related to our important batch changes milestone
 
 importChangesets:
 - repository: github.com/sourcegraph/sourcegraph

@@ -11,7 +11,7 @@ steps:
       python ../create-jira.py
       --summary 'Update ${{repository.name}}'
       --description 'Modify ${{ previous_step.modified_files }}'
-      --campaign_name "reactor-go-jira"
+      --batch change_name "reactor-go-jira"
       --jira_sitename mmgcn
       --jira_username mm@getcloudnative.fr
       --jira_token $JIRA_TOKEN

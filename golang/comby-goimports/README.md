@@ -1,6 +1,6 @@
 # Rewriting Go imports with Comby
 
-This campaign rewrites Go import paths for the `log15` package from `gopkg.in/inconshreveable/log15.v2` to `github.com/inconshreveable/log15` using [Comby](https://comby.dev/):
+This batch change rewrites Go import paths for the `log15` package from `gopkg.in/inconshreveable/log15.v2` to `github.com/inconshreveable/log15` using [Comby](https://comby.dev/):
 
 It can handle single-package import statements like these
 

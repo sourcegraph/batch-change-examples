@@ -1,5 +1,5 @@
 name: update-dart-base-images-2-10
-description: This campaign updates `google/dart:2.*` base images in Dockerfiles to `google/dart:2.10.2`.
+description: This batch change updates `google/dart:2.*` base images in Dockerfiles to `google/dart:2.10.2`.
 
 on:
   # Find all repositories that contain Dockerfiles with `FROM google/dart:2.*` as base images.
@@ -29,7 +29,7 @@ steps:
 changesetTemplate:
   title: Update google/dart base images in Dockerfiles to 2.10.2
   body: This updates google/dart base images used in Dockerfiles to version 2.10.2
-  branch: campaigns/google-dart-2-10-2-base-images # Push the commit to this branch.
+  branch: batch changes/google-dart-2-10-2-base-images # Push the commit to this branch.
   commit:
     message: Update google/dart base images in Dockerfiles to 2.10.2
   published:

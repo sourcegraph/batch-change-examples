@@ -1,4 +1,4 @@
-name: update-circle-ci-docker-user.campaign.yaml
+name: update-circle-ci-docker-user.batch change.yaml
 description: Changes the Docker Hub username used for Circle CI
 
 # Search for repositories containing a circle-ci.yml file with the old usename
@@ -19,7 +19,7 @@ steps:
 changesetTemplate:
   title: Use new Docker Hub username in Circle CI config
   body: This change replaces the old Docker Hub user with the new, CI specific user account.
-  branch: campaigns/update-ci-user # Push the commit to this branch.
+  branch: batch changes/update-ci-user # Push the commit to this branch.
   commit:
     message: Update Docker Hub user in CI
   published: false

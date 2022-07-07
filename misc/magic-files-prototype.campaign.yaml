@@ -28,7 +28,7 @@ steps:
 changesetTemplate:
   title: -=+ [[ *` Magic Files `* ]] +=-
   body: Maaaaaaaaaaaaagic!
-  branch: campaign/testing-magic-files
+  branch: batch-changetesting-magic-files
   commit:
     message: Magic files never hurt nobody
   published: false

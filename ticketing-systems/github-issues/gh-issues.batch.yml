@@ -1,6 +1,6 @@
 name: refactor-go-gh-issue
 description: |
-  This campaign creates Jira tickets for each repository where fmt.Sprintf is replaced by strconv.Itoa.
+  This batch change creates Jira tickets for each repository where fmt.Sprintf is replaced by strconv.Itoa.
   It also keeps the tickets updated when the batch change is re-applied.
 on:
   - repository: github.com/sourcegraph-testing/tiny-go-test-repository
@@ -17,7 +17,7 @@ steps:
       --description 'Modify ${{ previous_step.modified_files }}'
       --gh_username malomarrec
       --gh_token $GH_TOKEN
-      --labels batch-change campaign1
+      --labels batch-change batch change1
       --reopen
     container: malomarrec/src-gh-issue:latest
     env:

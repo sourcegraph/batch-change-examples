@@ -1,5 +1,5 @@
 name: multi-changesets
-description: This is a testing campaign that should have multiple changesets in a single repository.
+description: This is a testing batch change that should have multiple changesets in a single repository.
 
 on:
   - repositoriesMatchingQuery: repo:github.com/sourcegraph/automation-testing$
@@ -11,7 +11,7 @@ steps:
 changesetTemplate:
   title: multi-changesets
   body: multi-changesets
-  branch: campaigns/multi-changesets
+  branch: batch changes/multi-changesets
   commit:
     message: multi-changesets
   published: true
