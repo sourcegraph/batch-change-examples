@@ -17,19 +17,23 @@ steps:
         import sys
         try:
             package = None
-            file = sys.argv[1]
-            # Look for colors in package-lock to catch transitive dependencies, add resolutions in package.json
-            file = file.replace('package-lock.json', 'package.json')
+            files = sys.argv[1]
+            
+            # when a repository contains multiple package.json, they file paths gets passed as a string sepearated by
+            # spaces. We split by a single space to parse every single occurrence.
+            for file in files.split(' '):
+                # Look for colors in package-lock to catch transitive dependencies, add resolutions in package.json
+                file = file.replace('package-lock.json', 'package.json')
 
-            with open(file) as f:
-                package = json.loads(f.read())
-                if 'resolutions' in package:
-                    package['resolutions']['colors']="1.4.0"
-                else:
-                    package['resolutions'] = {"colors":"1.4.0"}
+                with open(file) as f:
+                    package = json.loads(f.read())
+                    if 'resolutions' in package:
+                        package['resolutions']['colors']="1.4.0"
+                    else:
+                        package['resolutions'] = {"colors":"1.4.0"}
 
-            with open(file, "w") as f:
-                f.write(json.dumps(package, indent=2))
+                with open(file, "w") as f:
+                    f.write(json.dumps(package, indent=2))
         except Exception as e:
             print("No-op:error {}".format(e))
 
