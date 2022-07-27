@@ -19,7 +19,7 @@ steps:
             package = None
             files = sys.argv[1]
             
-            # when a repository contains multiple package.json, they file paths gets passed as a string sepearated by
+            # when a repository contains multiple package.json, its file paths get passed as a string separated by
             # spaces. We split by a single space to parse every single occurrence.
             for file in files.split(' '):
                 # Look for colors in package-lock to catch transitive dependencies, add resolutions in package.json
