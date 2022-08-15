@@ -1,0 +1,20 @@
+name: add-sourcegraph-extension
+description: Add the Sourcegraph extension as a recommended vscode extension
+on:
+  - repositoriesMatchingQuery: file:.vscode/settings.json
+
+steps:
+  - run: |
+      python /tmp/add-sourcegraph.py ${{repository.search_result_paths}}
+    container: python:3-slim
+    mount:
+      - path: ./add-sourcegraph.py
+        mountpoint: /tmp/add-sourcegraph.py
+# Add your json prettifier of choice here
+
+changesetTemplate:
+  title: Add the Sourcegraph extension as a recommended vscode extension
+  body: Add the Sourcegraph extension as a recommended vscode extension
+  branch: batch-changes/sg-extension
+  commit:
+    message: sourcegraph sourcegraph extension
