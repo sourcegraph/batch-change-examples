@@ -17,4 +17,4 @@ changesetTemplate:
   body: Add the Sourcegraph extension as a recommended vscode extension
   branch: batch-changes/sg-extension
   commit:
-    message: sourcegraph sourcegraph extension
+    message: Add Sourcegraph extension to recommended set
