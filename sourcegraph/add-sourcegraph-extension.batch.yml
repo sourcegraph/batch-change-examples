@@ -1,7 +1,7 @@
 name: add-sourcegraph-extension
 description: Add the Sourcegraph extension as a recommended vscode extension
 on:
-  - repositoriesMatchingQuery: file:.vscode/settings.json
+  - repositoriesMatchingQuery: file:.vscode/extensions.json
 
 steps:
   - run: |
