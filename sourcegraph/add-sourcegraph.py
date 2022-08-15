@@ -20,7 +20,3 @@ if __name__ == "__main__":
             print(error)
     except:
         print("Didn't find any files. Exiting.")        
-        
-
-
-
