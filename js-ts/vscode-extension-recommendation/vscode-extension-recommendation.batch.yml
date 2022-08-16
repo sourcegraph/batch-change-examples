@@ -1,0 +1,70 @@
+name: vscode-extension-recommendation-demo
+description: Add a VS Code extension to the recommended extensions list
+
+# Repositories containing this package
+on:
+  - repositoriesMatchingQuery: path:.vscode\/extensions.json$
+
+steps:
+  - run: |
+      npm root -g
+      npm install -g jsonc-parser
+      NODE_PATH=$(npm root -g) node /add-to-recommendations.js ${{repository.search_result_paths}}
+    container: node:16-alpine
+    files:
+      /add-to-recommendations.js: |
+        const fs = require("fs");
+        const path = require("path");
+        const { modify, applyEdits, parse } = require("jsonc-parser");
+
+        const EXTENSION_NAME = "sourcegraph.sourcegraph";
+
+        const files = process.argv.slice(2);
+        if (files.length <= 0) {
+          console.log("Usage:");
+          console.log(
+            "dd-to-recommendations.js app1/.vscode/extension.json app2/.vscode/extension.json"
+          );
+          process.exit(1);
+        }
+
+        for (let file of files) {
+          const filepath = path.join(process.cwd(), file);
+
+          const content = fs.readFileSync(filepath, "utf8").toString();
+          const parsedContent = parse(content);
+
+          const hasExtension =
+            Array.isArray(parsedContent.recommendations) &&
+            parsedContent.recommendations.includes(EXTENSION_NAME);
+
+          if (hasExtension) {
+            console.log(`Extension already recommended in ${file}`);
+            process.exit(0);
+          }
+
+          const edit = modify(
+            content,
+            ["recommendations", 0],
+            "sourcegraph.sourcegraph",
+            {
+              isArrayInsertion: true,
+              formattingOptions: {
+                eol: "\n",
+                insertSpaces: true,
+                tabSize: 2,
+              },
+            }
+          );
+
+          fs.writeFileSync(filepath, applyEdits(content, edit));
+          console.log(`Extension added to recommendations in ${file}`);
+        }
+
+changesetTemplate:
+  title: Add recommended VS Code extension
+  body: This extension provides a lot of value and we recommend it to all developers.
+  branch: batch-changes/add-vscode-recommended-extension
+  commit:
+    message: Add recommended VS Code extension
+  published: false
