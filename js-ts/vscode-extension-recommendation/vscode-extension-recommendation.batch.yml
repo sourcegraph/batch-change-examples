@@ -67,4 +67,3 @@ changesetTemplate:
   branch: batch-changes/add-vscode-recommended-extension
   commit:
     message: Add recommended VS Code extension
-  published: false
