@@ -23,7 +23,7 @@ steps:
         if (files.length <= 0) {
           console.log("Usage:");
           console.log(
-            "dd-to-recommendations.js app1/.vscode/extension.json app2/.vscode/extension.json"
+            "node add-to-recommendations.js app1/.vscode/extension.json app2/.vscode/extension.json"
           );
           process.exit(1);
         }
