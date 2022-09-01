@@ -3,7 +3,7 @@ description: Add scaffold to add this repository to the backstage catalog
 
 # All repos from a given codehost
 on:
-  - repositoriesMatchingQuery: repo:github\.com count:1
+  - repositoriesMatchingQuery: repo:github\.com
 
 steps:
   # Run comby over the search results in each repository:
@@ -36,6 +36,7 @@ steps:
                 out.write(TEMPLATE.format(metadata["name"],metadata["description"],metadata["url"],metadata["nameWithOwner"]))
 
     # Make sure to set GH_TOKEN in your local shell
+    # Note: setting env variables/secrets is not yet available when running server-side. Coming soon!
     env:
       - GH_TOKEN
 changesetTemplate:
