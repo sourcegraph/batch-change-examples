@@ -1,0 +1,49 @@
+name: add-repo-to-backstage
+description: Add scaffold to add this repository to the backstage catalog
+
+# All repos from a given codehost
+on:
+  - repositoriesMatchingQuery: repo:github\.com
+
+steps:
+  # Run comby over the search results in each repository:
+  - run: |
+      apk add github-cli;
+      gh auth login -h github.com;
+      gh repo view sourcegraph/sourcegraph --json=description,url,name,owner,nameWithOwner,languages > tmp.json;
+      python /tmp/create-catalog.py;
+      rm tmp.json
+    container: python:3-alpine
+    files:
+      /tmp/create-catalog.py: |
+        import json
+
+        TEMPLATE ="""kind: Component
+        metadata:
+          name: {}
+          description: |
+            {}
+          links:
+          - title: Repository
+            url: {}
+          annotations:
+            github.com/project-slug: {}
+        """
+
+        with open('tmp.json','r') as f:
+            metadata = json.load(f)
+            with open('catalog-info.yml','w+') as out:
+                out.write(TEMPLATE.format(metadata["name"],metadata["description"],metadata["url"],metadata["nameWithOwner"]))
+
+    # Make sure to set GH_TOKEN in your local shell
+    # Note: setting env variables/secrets is not yet available when running server-side. Coming soon!
+    env:
+      - GH_TOKEN
+changesetTemplate:
+  title: Add this repo to backstage catalog
+  body: |
+    This is a scaffold to add this repo to the backstage service catalog.
+    It's recommended to add configuration details ([example](https://github.com/backstage/backstage/blob/master/catalog-info.yaml)), but you can also merge this changeset as is.
+  branch: backstage
+  commit:
+    message: Add repo to backstage service catalog

@@ -1,0 +1,33 @@
+name: add-repo-to-backstage
+description: Add scaffold to add this repository to the backstage catalog
+
+# All repos from a given codehost
+on:
+  - repositoriesMatchingQuery: repo:github\.com
+
+steps:
+  # Run comby over the search results in each repository:
+  - run: |
+      name=$(echo ${{repository.name}} | awk -F'/' '{print $2}')
+      cp /tmp/catalog-info.yaml .
+      sed -i "s/{{name}}/$name/" ./catalog-info.yaml
+    container: alpine:3
+    files:
+      # Create files inside the container by specifying path and content here:
+      /tmp/catalog-info.yaml: |
+        kind: Component
+        metadata:
+          name: {{name}}
+          links:
+          - title: Repository
+            url: https://www.${{repository.name}}
+          annotations:
+            github.com/project-slug: ${{repository.name}}
+changesetTemplate:
+  title: Add this repo to backstage catalog
+  body: |
+    This is a scaffold to add this repo to the backstage service catalog.
+    It's recommended to add configuration details ([example](https://github.com/backstage/backstage/blob/master/catalog-info.yaml)), but you can also merge this changeset as is.
+  branch: backstage
+  commit:
+    message: Add repo to backstage service catalog
