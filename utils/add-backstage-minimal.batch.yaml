@@ -3,7 +3,7 @@ description: Add scaffold to add this repository to the backstage catalog
 
 # All repos from a given codehost
 on:
-  - repositoriesMatchingQuery: repo:github\.com count:1
+  - repositoriesMatchingQuery: repo:github\.com
 
 steps:
   # Run comby over the search results in each repository:
