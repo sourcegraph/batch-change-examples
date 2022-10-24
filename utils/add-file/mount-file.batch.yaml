@@ -5,7 +5,7 @@ description: Add file to all paths with a search result. In this example, we add
 on:
   - repositoriesMatchingQuery: file:README.md count:200
 
-# Besides each match, add a readme file. Note that repository.search_result_paths is a helper variable provided by the spec templating language.
+# Beside each match, add a LICENSE.md file. Note that repository.search_result_paths is a helper variable provided by the spec templating language.
 steps:
   - run: |
         for result in ${{repository.search_result_paths}};
