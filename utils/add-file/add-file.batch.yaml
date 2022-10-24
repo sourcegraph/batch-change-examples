@@ -1,5 +1,5 @@
 name: add-file-at-result-path-using-embedded-file
-description: Add file to all path with a search result. In this example, we add an Apache license beside each README.md file.
+description: Add file to all paths with a search result. In this example, we add an Apache license beside each README.md file.
 
 # Find all repositories that contain a README.md file.
 on:
