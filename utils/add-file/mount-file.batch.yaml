@@ -1,0 +1,33 @@
+name: add-file-at-result-path-using-mounting
+description: Add file to all path with a search result. In this example, we add an Apache license beside each README.md file.
+
+# Find all repositories that contain a README.md file.
+on:
+  - repositoriesMatchingQuery: file:README.md count:200
+
+# Besides each match, add a readme file. Note that repository.search_result_paths is a helper variable provided by the spec templating language.
+steps:
+  - run: |
+        for result in ${{repository.search_result_paths}};
+        do
+            pushd "$(dirname "$result")"
+            cat /tmp/apache.txt > LICENSE.md
+            popd
+        done
+
+# We could have just added a single license at the root of each matching repository with
+# cat /tmp/apache.txt > LICENSE.md
+    container: ubuntu:18.04
+    mount:
+      # Note that this requires apache.txt to be available at the same level as the batch spec.
+      # To execute on the server, use `src batch remote -f mount-file.batch.yaml`.
+      - path: ./apache.txt
+        mountpoint: /tmp/apache.txt
+
+# Describe the changeset (e.g., GitHub pull request) you want for each repository.
+changesetTemplate:
+  title: Add Apache licenses via file mounting
+  body: Add Apache licenses alongside README.md files.
+  branch: add-license-via-mounted-file
+  commit:
+    message: Add Apache license(s)

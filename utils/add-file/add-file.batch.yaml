@@ -1,4 +1,4 @@
-name: add-file-at-result-path
+name: add-file-at-result-path-using-embedded-file
 description: Add file to all path with a search result. In this example, we add an Apache license beside each README.md file.
 
 # Find all repositories that contain a README.md file.
@@ -10,12 +10,12 @@ steps:
   - run: |
         for result in ${{repository.search_result_paths}};
         do
-            pushd ${result%/*}
+            pushd "$(dirname "$result")"
             cat /tmp/apache.txt > LICENSE.md
             popd
         done
 
-# We could have just added a single license at the root of each mathching repository with
+# We could have just added a single license at the root of each matching repository with
 # cat /tmp/apache.txt > LICENSE.md
     container: ubuntu:18.04
     files:
@@ -224,8 +224,8 @@ steps:
 
 # Describe the changeset (e.g., GitHub pull request) you want for each repository.
 changesetTemplate:
-  title: Hello World
-  body: My first batch change!
-  branch: hello-world # Push the commit to this branch.
+  title: Add Apache licenses via an embedded file
+  body: Add Apache licenses alongside README.md files.
+  branch: add-license-via-embedded-file
   commit:
-    message: Append Hello World to all README.md files
+    message: Add Apache license(s)
