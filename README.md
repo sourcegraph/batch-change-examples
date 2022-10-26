@@ -12,7 +12,6 @@ Take a look at the [Sourcegraph documentation on Batch Changes](https://docs.sou
 - [Refactor Go code with Comby](golang/comby-go-refactor/README.md)
 - [Open Jira tickets alongside changesets](ticketing-systems/jira-tickets/README.md)
 - [Open GitHub tickets alongside changesets (declarative)](ticketing-systems/github-issues/README.md)
-- [Update the Docker Hub username in Circle CI configurations](ci/update-circle-ci-config/update-circle-ci-config.batch.yaml)
 - [Update deprecated GraphQL API query](js-ts/update-api-query/replace-viewer-configuration.yaml)
 - [Migrate from Python 2 to 3](python/python-refactor/README.md)
 - [Update package.json for NPM dependencies](js-ts/npm-package-update/README.md)
