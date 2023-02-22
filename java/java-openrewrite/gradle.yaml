@@ -1,0 +1,73 @@
+name: openrewrite-gradle
+description: Add Hello World to READMEs
+
+on:
+  # Change this search query to run rewrite on other repositories. For example,
+  # `file:^gradlew` matches all repositories with a top-level `gradlew` file.
+  - repositoriesMatchingQuery: repo:apache/poi
+
+steps:
+  # Change `org.gradle.jvmargs` option to customize JVM flagw. Useful to increase memory.
+  - run: ./gradlew --init-script /openrewrite.gradle -Porg.gradle.jvmargs=-Xmx16000m rewriteRun
+    container: gradle:jdk11
+    files:
+      /openrewrite.gradle: |
+        // Gradle init script that automatically enables the openrewrite plugin
+        // even if it's not declared in the build. Adapted from the following docs:
+        // https://docs.openrewrite.org/running-recipes/running-rewrite-on-a-gradle-project-without-modifying-the-build
+        initscript {
+            repositories {
+                mavenCentral()
+                maven { url "https://plugins.gradle.org/m2" }
+            }
+
+            dependencies {
+                classpath("org.openrewrite:plugin:latest.release")
+            }
+        }
+
+        addListener(new BuildInfoPluginListener())
+
+        allprojects {
+            repositories {
+                mavenCentral()
+            }
+            project.afterEvaluate {
+                if (!project.plugins.hasPlugin(org.openrewrite.gradle.RewritePlugin)) {
+                    project.plugins.apply(org.openrewrite.gradle.RewritePlugin)
+                }
+            }
+            dependencies {
+              // (optional) Add custom dependencies, which is needed to run non-builtin recipes.
+              // rewrite("org.openrewrite:rewrite-java")
+              // rewrite(platform("org.openrewrite.recipe:rewrite-recipe-bom:1.15.0"))
+              // rewrite("org.openrewrite.recipe:rewrite-migrate-java")
+            }
+            rewrite {
+              // Change the active recipe below to run something else than OrderImports
+              activeRecipe("org.openrewrite.java.OrderImports")
+            }
+        }
+
+        class BuildInfoPluginListener extends BuildAdapter {
+
+            def void projectsLoaded(Gradle gradle) {
+                Project root = gradle.getRootProject()
+                if (!"buildSrc".equals(root.name)) {
+                    root.allprojects {
+                        apply {
+                            apply plugin: org.openrewrite.gradle.RewritePlugin
+                        }
+                    }
+                }
+            }
+        }
+
+# Describe the changeset (e.g., GitHub pull request) you want for each repository.
+changesetTemplate:
+  title: Reorder imports with Openrewrite
+  body: This PR shows how to use Batch Changes with Openrewrite and Gradle
+  commit:
+    message: Reorder imports
+  # Optional: Push the commit to a branch named after this batch change by default.
+  branch: ${{ batch_change.name }}
