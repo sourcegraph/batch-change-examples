@@ -1,0 +1,23 @@
+name: openrewrite-maven
+description: Order imports
+
+on:
+  # Change this search query to run rewrite on other repositories. For example,
+  # `file:^pom.xml` matches all repositories with a top-level `pom.xml` file.
+  - repositoriesMatchingQuery: repo:java-design-patterns
+
+steps:
+  # Change `activeRecipes` value to run another recipe.
+  - run: mvn org.openrewrite.maven:rewrite-maven-plugin:4.36.0:run -DactiveRecipes=org.openrewrite.java.OrderImports -Dcheckstyle.skip
+    container: maven:eclipse-temurin
+    env:
+      MAVEN_OPTS: -Xmx16000m # Custom Java options. Useful to increase memory.
+
+# Describe the changeset (e.g., GitHub pull request) you want for each repository.
+changesetTemplate:
+  title: Order Java imports
+  body: This is demo of how to run the Openrewrite `OrderImports` recipe against a Java codebase
+  commit:
+    message: Order imports
+  # Optional: Push the commit to a branch named after this batch change by default.
+  branch: ${{ batch_change.name }}
