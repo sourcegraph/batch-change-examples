@@ -22,3 +22,4 @@ src batch apply -f jira.batch.yaml
 * Batch changes has a declarative syntax for code changes: if the state of the codebase has not changed between two runs, there will be no additional changesets created.
 * It's up to the user to make sure that the steps the batch change runs are declarative.
 * In this simple example, tickets are not "declarative": every time that the batch change runs, and changesets are created or updated, a new ticket will be created (instead of tickets being updated).
+Hello World
