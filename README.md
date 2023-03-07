@@ -23,3 +23,4 @@ For a list of static-checker style linting rules for go, also see [comby go-patt
 ## Other examples
 
 Also see how Batch Changes can help respond to a vulnerability with this [example](https://github.com/sourcegraph/log4j-cve-code-search-resources/tree/c70aeb6236f12c22c7c19e9b3fa54b2049213e29/batch-changes)
+Hello World
