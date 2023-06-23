@@ -1,0 +1,59 @@
+name: manipulating-xml
+description: Add Hello World to READMEs
+
+# Find the first 100 search results for README files.
+# This could yield less than 100 repos/workspaces if some repos contain multiple READMEs.
+on:
+  - repositoriesMatchingQuery: file:pom.xml repo:^github\.com/sourcegraph-testing/java-design-patterns$
+
+# In each repository, run this command. Each repository's resulting diff is captured.
+steps:
+  - run: |
+      for result in "${{ join repository.search_result_paths " " }}"; do
+        python /tmp/script.py "${result}";
+      done;
+    container: bolajisourcegraph/python-lxml
+    files:
+      /tmp/script.py: |
+        import lxml.etree as etree
+        import sys
+
+        for filename in sys.argv[1].split(' '):
+          # Parse the XML file
+          tree = etree.parse(filename)
+          root = tree.getroot()
+
+          # Find the 'dependencies' element in the XML tree
+          dependencies = root.find('{http://maven.apache.org/POM/4.0.0}dependencies')
+
+          # Flag to check if the required dependency is found
+          found_lombok = False
+
+          # Check if the 'dependencies' element exists
+          if dependencies is not None:
+              # Iterate over each dependency in the 'dependencies' element
+              for dep in dependencies:
+                  # Check if the current dependency matches the required criteria
+                  groupId = dep.find('{http://maven.apache.org/POM/4.0.0}groupId')
+                  hasLombokGroupID = groupId is not None and groupId.text == 'org.projectlombok'
+
+                  artifactId = dep.find('{http://maven.apache.org/POM/4.0.0}artifactId')
+                  hasLombokArtifactID = artifactId is not None and artifactId.text == 'lombok'
+
+                  version = dep.find('{http://maven.apache.org/POM/4.0.0}version')
+                  shouldUpgradeVersion = version is not None and version.text != '1.18.28'
+
+                  if hasLombokGroupID and hasLombokArtifactID and shouldUpgradeVersion:
+                      # Update the version of the dependency
+                      version.text = '1.18.28'
+                      tree.write(filename, xml_declaration=True, encoding=tree.docinfo.encoding)
+
+
+# Describe the changeset (e.g., GitHub pull request) you want for each repository.
+changesetTemplate:
+  title: Upgrade lombok dependency
+  body: Upgrades the lombok dependency
+  commit:
+    message: Upgrade lombok
+  # Optional: Push the commit to a branch named after this batch change by default.
+  branch: ${{ batch_change.name }}
