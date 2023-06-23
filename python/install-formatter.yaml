@@ -1,0 +1,28 @@
+name: install-formatter
+description: install formatter in all python codebase
+
+on:
+  - repository: github.com/sourcegraph-testing/python-monorepo
+
+workspaces:
+  - rootAtLocationOf: pyproject.toml
+    in: github.com/sourcegraph-testing/python-monorepo
+
+steps:
+  - run:
+      poetry add -D yapf
+    container: bolajisourcegraph/python-lxml
+
+# Describe the changeset (e.g., GitHub pull request) you want for each repository.
+changesetTemplate:
+  title: Add formatter
+  body: |
+    This PR installs a formatter in the codebase
+
+    ${{ range $index, $file := steps.modified_files }}
+      - ${{ $file }}
+    ${{ end }}
+  commit:
+    message: install formatter
+  # Optional: Push the commit to a branch named after this batch change by default.
+  branch: ${{ batch_change.name }}

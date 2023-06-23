@@ -4,7 +4,23 @@ description: Manipulate pom.xml files
 # Find the first 100 search results for README files.
 # This could yield less than 100 repos/workspaces if some repos contain multiple READMEs.
 on:
-  - repositoriesMatchingQuery: file:pom.xml repo:^github\.com/sourcegraph-testing/jdp$
+  - repositoriesMatchingQuery: file:pom.xml
+
+transformChanges:
+  # Group the file diffs by directory and produce an additional changeset per group.
+  group:
+    # Create a separate changeset for all changes in the top-level `ambassador` directory
+    - directory: ambassador
+      branch: bo/lombok-upgrade-ambassador # will replace the `branch` in the `changesetTemplate`
+
+    - directory: visitor
+      branch: bo/lombok-upgrade-visitor # will replace the `branch` in the `changesetTemplate`
+
+    - directory: twin
+      branch: bo/lombok-upgrade-twin # will replace the `branch` in the `changesetTemplate`
+
+    - directory: abstract-document
+      branch: bo/lombok-upgrade-abstract-document # will replace the `branch` in the `changesetTemplate`
 
 # In each repository, run this command. Each repository's resulting diff is captured.
 steps:
@@ -13,6 +29,7 @@ steps:
         python /tmp/script.py "${result}";
       done;
     container: bolajisourcegraph/python-lxml
+    if: ${{ matches repository.name "*sourcegraph-testing*" }}
     files:
       /tmp/script.py: |
         import lxml.etree as etree
@@ -53,12 +70,7 @@ steps:
 changesetTemplate:
   title: Upgrade lombok dependency
   body: |
-    This PR upgrades the lombok dependency in the following directories:
-
-    ${{ range $index, $file := steps.modified_files }}
-      - ${{ $file }}
-    ${{ end }}
+    This PR upgrades the lombok dependency.
   commit:
     message: Upgrade lombok
-  # Optional: Push the commit to a branch named after this batch change by default.
-  branch: ${{ batch_change.name }}
+  branch: bo/lombok-upgrade
