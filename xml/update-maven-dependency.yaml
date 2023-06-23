@@ -8,11 +8,7 @@ description: Add Hello World to READMEs
 # Find the first 100 search results for README files.
 # This could yield less than 100 repos/workspaces if some repos contain multiple READMEs.
 on:
-<<<<<<< HEAD
-  - repositoriesMatchingQuery: file:pom.xml repo:^github\.com/sourcegraph-testing/jdp$
-=======
   - repositoriesMatchingQuery: file:pom.xml repo:^github\.com/sourcegraph-testing/java-design-patterns$
->>>>>>> 003000b (Create update-maven-dependency.yaml)
 
 # In each repository, run this command. Each repository's resulting diff is captured.
 steps:
