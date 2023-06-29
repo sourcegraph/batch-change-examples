@@ -1,14 +1,10 @@
 name: manipulating-xml
-<<<<<<< HEAD
 description: Manipulate pom.xml files
-=======
-description: Add Hello World to READMEs
->>>>>>> 003000b (Create update-maven-dependency.yaml)
 
 # Find the first 100 search results for README files.
 # This could yield less than 100 repos/workspaces if some repos contain multiple READMEs.
 on:
-  - repositoriesMatchingQuery: file:pom.xml repo:^github\.com/sourcegraph-testing/java-design-patterns$
+  - repositoriesMatchingQuery: file:pom.xml repo:^github\.com/sourcegraph-testing/jdp$
 
 # In each repository, run this command. Each repository's resulting diff is captured.
 steps:
