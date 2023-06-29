@@ -1,0 +1,151 @@
+# https://docs.sourcegraph.com/batch_changes/references/batch_spec_yaml_reference#transformchanges
+name: update-k8s-yaml
+description: |
+  Add namespace and modify metadata annotations.
+
+  This is an arbitrary script used to insert some made up values that Bolaji created into
+  kubernetes spec files. 
+  The script doesn't explicitly check which YAML is used by k8s because it assumes every YAML
+  in the `sourcegraph-testing/k8s-examples` repo is a kubernetes spec file.
+
+# Find the first 100 search results for README files.
+# This could yield less than 100 repos/workspaces if some repos contain multiple READMEs.
+on:
+  - repositoriesMatchingQuery: lang:YAML r:^github\.com/sourcegraph-testing/k8s-examples$
+  - repository: github.com/sourcegraph-testing/k8s-workshop-tfc
+    branch: dev
+
+workspaces:
+  - rootAtLocationOf: .gitkeep
+    in: github.com/sourcegraph-testing/k8s-workshop-tfc
+
+transformChanges:
+  group:
+    - directory: cassandra
+      branch: bo/cassandra-update
+      repository: github.com/sourcegraph-testing/k8s-examples
+
+    - directory: dev/cloudbuild
+      branch: bo/dev/cloudbuild-update
+      repository: github.com/sourcegraph-testing/k8s-examples
+
+    - directory: staging/cluster-dns
+      branch: bo/staging/cluster-dns-update
+      repository: github.com/sourcegraph-testing/k8s-examples
+
+    - directory: staging/cloud-controller-manager
+      branch: bo/staging/cloud-controller-manager-update
+      repository: github.com/sourcegraph-testing/k8s-examples
+
+    - directory: staging/cockroach-db
+      branch: bo/staging/cockroach-db-update
+      repository: github.com/sourcegraph-testing/k8s-examples
+
+    - directory: staging/explorer
+      branch: bo/staging/explorer-update
+      repository: github.com/sourcegraph-testing/k8s-examples
+
+    - directory: staging/spark/spark-gluster
+      branch: bo/staging/spark/spark-gluster-update
+      repository: github.com/sourcegraph-testing/k8s-examples
+
+    - directory: volumes/iscsi
+      branch: bo/volumes/iscsi-update
+      repository: github.com/sourcegraph-testing/k8s-examples
+
+    - directory: volumes/cephfs
+      branch: bo/volumes/cephfs-update
+      repository: github.com/sourcegraph-testing/k8s-examples
+
+    - directory: volumes/storageos
+      branch: bo/volumes/storageos-update
+      repository: github.com/sourcegraph-testing/k8s-examples
+
+# In each repository, run this command. Each repository's resulting diff is captured.
+steps:
+  - run: |
+      for result in "${{ join repository.search_result_paths " " }}"; do
+        python /tmp/script.py "${result}";
+      done;
+    container: bolajisourcegraph/pycustom
+    if: ${{ matches repository.name "*sourcegraph-testing/k8s-exam*" }}
+    files:
+      /tmp/script.py: |
+          import yaml
+          import sys
+
+          # Function to load a YAML file
+          def load_yaml_file(file_path):
+              with open(file_path, 'r') as file:
+                  docs = yaml.safe_load_all(file)
+                  return list(docs)
+
+          # Function to save a YAML file
+          def save_yaml_file(data, file_path):
+              with open(file_path, 'w') as file:
+                  yaml.dump_all(data, file)
+
+          for file_path in sys.argv[1].split(' '):
+              data = load_yaml_file(file_path)
+
+              for datum in data:
+                # Perform manipulations on the YAML data
+                # Example: Modify the namespace
+                datum['metadata'] = datum.get('metadata', {})
+                datum['metadata']['namespace'] = 'my-namespace'
+
+                # Example: Add or modify annotations
+                annotations = datum['metadata'].get('annotations', {})
+                annotations['my-key'] = 'my-value'
+                datum['metadata']['annotations'] = annotations
+
+              save_yaml_file(data, file_path)
+
+  - run: cat /tmp/README.md >> "README.md"
+    container: ubuntu:18.04
+    if: ${{ eq repository.name "github.com/sourcegraph-testing/k8s-workshop-tfc" }}
+    files:
+      /tmp/README.md: |
+        # Random Readme
+
+        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's 
+        standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to 
+        make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, 
+        remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing 
+        Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including 
+        versions of Lorem Ipsum.
+
+# Describe the changeset (e.g., GitHub pull request) you want for each repository.
+changesetTemplate:
+  title: Hello World
+
+  # The repository.name is a template variable available in the changesetTemplate . It points to the full name of the repository in which the step is being executed.
+  # (github.com/foo/bar)
+  # I use the helper function split to split by the first . and this should return an array. Assuming the different codehosts are github.com , 
+  # gitlab.com and bitbucket.coom, it'll return github, gitlaband bitbucket. The I get the item at the first index and check if it's equal to gitlab,
+  body: |
+    Not my first batch change.
+
+    ${{ batch_change.description }}
+
+    ${{ if eq repository.name "github.com/sourcegraph-testing/k8s-workshop-tfc" }}
+      @BolajiOlajide please check this out.
+
+      #### Added Files
+      ${{ range $index, $file := steps.added_files }}
+        - ${{ $file }}
+
+      ${{ end }}
+    ${{end}}
+
+    ${{ if eq repository.name "github.com/sourcegraph-testing/k8s-examples" }}
+      #### Modified Files
+      ${{ range $index, $file := steps.modified_files }}
+        - ${{ $file }}
+
+      ${{ end }}
+    ${{ end }}
+  commit:
+    message: do some magic
+  # Optional: Push the commit to a branch named after this batch change by default.
+  branch: bo/demo-commit${{ replace steps.path "/" "-" }}
