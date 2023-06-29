@@ -101,7 +101,7 @@ steps:
 
               save_yaml_file(data, file_path)
 
-  - run: mv -r /tmp/k8s .
+  - run: cp -r /tmp/k8s .
     container: ubuntu:18.04
     if: ${{ eq repository.name "github.com/sourcegraph-testing/k8s-workshop-tfc" }}
     files:
