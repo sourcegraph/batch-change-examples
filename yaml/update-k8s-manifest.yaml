@@ -101,19 +101,44 @@ steps:
 
               save_yaml_file(data, file_path)
 
-  - run: cat /tmp/README.md >> "README.md"
+  - run: mv -r /tmp/k8s .
     container: ubuntu:18.04
     if: ${{ eq repository.name "github.com/sourcegraph-testing/k8s-workshop-tfc" }}
     files:
-      /tmp/README.md: |
-        # Random Readme
+      /tmp/k8s/pods.yaml: |
+        apiVersion: v1
+        kind: Pod
+        metadata:
+          name: nginx
+        spec:
+          containers:
+          - name: nginx
+            image: nginx:1.14.2
+            ports:
+            - containerPort: 80
 
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's 
-        standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to 
-        make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, 
-        remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing 
-        Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including 
-        versions of Lorem Ipsum.
+      /tmp/k8s/deployments.yaml: |
+        apiVersion: apps/v1
+        kind: Deployment
+        metadata:
+          name: nginx-deployment
+          labels:
+            app: nginx
+        spec:
+          replicas: 3
+          selector:
+            matchLabels:
+              app: nginx
+          template:
+            metadata:
+              labels:
+                app: nginx
+            spec:
+              containers:
+              - name: nginx
+                image: nginx:1.14.2
+                ports:
+                - containerPort: 80
 
 # Describe the changeset (e.g., GitHub pull request) you want for each repository.
 changesetTemplate:
