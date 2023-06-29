@@ -142,7 +142,8 @@ steps:
 
 # Describe the changeset (e.g., GitHub pull request) you want for each repository.
 changesetTemplate:
-  title: Hello World
+  title: |
+    batches: update k8s manifest in repos (demo)
 
   # The repository.name is a template variable available in the changesetTemplate . It points to the full name of the repository in which the step is being executed.
   # (github.com/foo/bar)
