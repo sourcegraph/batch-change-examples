@@ -1,0 +1,36 @@
+name: Introduce-PHPStan
+description: Improve QA tooling by introducing PHPStan
+
+on:
+  - repositoriesMatchingQuery: 'repo:has.path(.*\.php$) -repo:has.content(phpstan/phpstan)'
+
+# In each matched repository:
+#   - Install PHPStan as a dev dependency
+#   - Add PHPStan to CI workflow
+#   - Create PHPStan configuration file
+#   - Generate baseline file with existing issues (some issues can't be dumped, so CI job may fail even with baseline)
+#
+# Please keep in mind that it assumes few things (like `src` and `tests` directories in the repo),
+# some repositories may require dedicated image to run PHPStan on (additional libs, PHP extensions etc.),
+# so in the end it may require additional tweaks for specific repos to work correctly.
+#
+# See: https://twitter.com/_Codito_/status/1701558793136484401
+steps:
+  - run: |
+      apt-get update && apt-get install -y zip unzip libzip-dev \
+      && docker-php-ext-install zip \
+      && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
+      && composer require --dev --no-plugins phpstan/phpstan \
+      && echo -e 'parameters:\n  paths:\n    - src\n    - tests\n  level: max' > phpstan.dist.neon \
+      && vendor/bin/phpstan --ansi analyse --generate-baseline=phpstan-baseline.php --memory-limit=2G \
+      && echo -e '\nincludes:\n  - phpstan-baseline.php' >> phpstan.dist.neon \
+      && php -r "\$json = json_decode(file_get_contents(__DIR__.'/composer.json'), true); \$json['scripts']['phpstan:check'] = ['Composer\Config::disableProcessTimeout', 'phpstan analyse']; \$json['scripts']['phpstan:baseline'] = '@phpstan:check --generate-baseline=phpstan-baseline.php'; \$json['scripts']['quality-assurance'][] = '@phpstan:check'; \$json['scripts']['qa'] = '@quality-assurance'; \$scripts = \$json['scripts']; ksort(\$scripts); \$json['scripts'] = \$scripts; file_put_contents(__DIR__.'/composer.json', json_encode(\$json, JSON_PRETTY_PRINT|JSON_UNESCAPED_SLASHES));" \
+      && echo -e 'phpstan:\n  image: php:8.2-cli-alpine\n  script:\n    - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer\n    - composer update --prefer-dist --no-progress\n    - COMPOSER_ALLOW_SUPERUSER=1 composer phpstan:check' >> .gitlab-ci.yml \
+    container: php:8.2-cli
+
+changesetTemplate:
+  title: 'Introduce PHPStan'
+  body: Introduce PHPStan to the project and dump existing problems to baseline file.
+  commit:
+    message: Introduce PHPStan
+  branch: batch-changes/introduce-phpstan
