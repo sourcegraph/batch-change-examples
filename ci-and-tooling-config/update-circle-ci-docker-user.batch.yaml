@@ -1,4 +1,4 @@
-name: update-circle-ci-docker-user.batch change.yaml
+name: update-circle-ci-docker-user.batch-change.yaml
 description: Changes the Docker Hub username used for Circle CI
 
 # Search for repositories containing a circle-ci.yml file with the old usename
