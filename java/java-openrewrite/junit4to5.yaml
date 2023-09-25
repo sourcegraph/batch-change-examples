@@ -1,0 +1,124 @@
+name: junit4to5
+description: Migrate from junit4 to junit5
+
+# maybe better way to detect junit version
+
+on:
+  - repositoriesMatchingQuery: context:global lang:Gradle file:build testImplementation junit:junit:4 repo:SAP patternType:regexp
+steps:
+  - run: |
+        FILE=gradlew
+        if [ -f $FILE ]; then
+        if [ ! -x $FILE ]; then
+          echo "File $FILE is not executable. Adding execute permissions."
+          chmod +x $FILE
+        else 
+          echo "File $FILE is already executable."
+        fi
+        else
+          echo "File $FILE does not exist."
+        fi
+        ./gradlew --init-script /tmp/init.gradle rewriteRun >&1
+    container: gradle:latest
+    outputs:
+      stdOut:
+        value: "${{ step.stdout }}"
+    files:
+      /tmp/init.gradle: |
+        initscript {
+          repositories {
+            maven { url "https://plugins.gradle.org/m2" }
+            }
+            dependencies {
+              classpath("org.openrewrite:plugin:latest.release")
+              }
+        }
+        addListener(new BuildInfoPluginListener())
+        
+        allprojects {
+        project.afterEvaluate {
+            if (!project.plugins.hasPlugin(org.openrewrite.gradle.RewritePlugin)) {
+                project.plugins.apply(org.openrewrite.gradle.RewritePlugin)
+            }
+        }
+        dependencies {
+            rewrite(platform("org.openrewrite.recipe:rewrite-recipe-bom:2.0.0"))
+            rewrite("org.openrewrite.recipe:rewrite-testing-frameworks:2.0.0")
+            rewrite("org.openrewrite:rewrite-java")
+        }
+        
+        rewrite {
+          configFile = project.getRootProject().file("/tmp/rewrite.yml")
+          activeRecipe("org.openrewrite.java.testing.junit5.JUnit4to5Migration", "com.sourcegraph.batchchange.Junit5UpdateBuildGradle")
+          }
+        }
+
+        class BuildInfoPluginListener extends BuildAdapter {
+
+            def void projectsLoaded(Gradle gradle) {
+                Project root = gradle.getRootProject()
+                if (!"buildSrc".equals(root.name)) {
+                    root.allprojects {
+                        apply {
+                            apply plugin: org.openrewrite.gradle.RewritePlugin
+                        }
+                    }
+                }
+            }
+        }
+      /tmp/rewrite.yml: |
+        ---
+        type: specs.openrewrite.org/v1beta/recipe
+        name: com.sourcegraph.batchchange.Junit5UpdateBuildGradle
+        displayName: Update build.gradle file to support Junit5 migration
+        tags:
+          - junit
+          - gradle
+          - testing
+        recipeList:
+          - org.openrewrite.gradle.RemoveGradleDependency:
+              configuration: testImplementation
+              groupId: junit
+              artifactId: junit
+          - org.openrewrite.gradle.RemoveGradleDependency:
+              configuration: testImplementation
+              groupId: junit
+              artifactId: junit
+          - org.openrewrite.gradle.RemoveGradleDependency:
+              configuration: testImplementation
+              groupId: org.junit.vintage
+              artifactId: junit-vintage-engine
+          - org.openrewrite.gradle.AddDependency:
+              groupId: org.junit.jupiter
+              artifactId: junit-jupiter-params
+              version: 5.9.3
+              onlyIfUsing: org.junit.jupiter.params.ParameterizedTest
+          - org.openrewrite.gradle.AddDependency:
+              groupId: org.junit.jupiter
+              artifactId: junit-jupiter
+              version: 5.9.3
+              onlyIfUsing: org.junit.jupiter.api.Test
+          - org.openrewrite.gradle.AddDependency:
+              groupId: org.junit.jupiter
+              artifactId: junit-jupiter-migrationsupport
+              version: 5.9.3
+              onlyIfUsing: org.junit.rules.*
+          - org.openrewrite.gradle.AddDependency:
+              groupId: org.hamcrest
+              artifactId: hamcrest
+              version: 2.2
+              onlyIfUsing: org.hamcrest.*
+          - org.openrewrite.gradle.AddDependency:
+              groupId: org.hamcrest
+              artifactId: hamcrest-junit
+              version: 2.0.0.0
+              onlyIfUsing: org.hamcrest.junit.*
+
+# Describe the changeset (e.g., GitHub pull request) you want for each repository.
+changesetTemplate:
+  title: Migrate from Junit4 to Junit5
+  body: This will update Junit4 to Junit5. It executes a number of Openrewrite recipes to update the Java code and Gradle dependencies.
+  commit:
+    message: Update Java Code and build.gradle from Junit4 to Junit5
+  # Optional: Push the commit to a branch named after this batch change by default.
+  branch: ${{ batch_change.name }}
